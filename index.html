@@ -3,10 +3,13 @@
         <meta charset="UTF-8">
         <!-- VUE CDN - replace with NPM later -->
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
-        
+        <script src="https://unpkg.com/vuex@2.0.0"></script>
+
         <link rel="icon" href="../quiz_app/media/sviniPivemNezarmoutis_logo.png">
    
         <!-- LOCAL SCRIPTS -->
         <script src="../quiz_app/script/main.js"></script>
     </head>
+
+    <input type="file" name="quiz-load" id="quizLoadInput" v-on:change="loadFile()">
 </html>
