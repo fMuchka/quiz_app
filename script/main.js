@@ -5,14 +5,8 @@ const store = new Vuex.Store({
     },
 
     mutations: {
-        // load quiz via file upload
-        loadQuiz (state) {
-            let reader = new FileReader();
-            reader.onload = () =>{
-                state.quiz = JSON.parse(event.target.result); 
-            };
-
-            reader.readAsText(event.target.files[0]); 
+        setQuiz (state, quiz) {
+            state.quiz = quiz;
         }
     },
 
@@ -28,12 +22,20 @@ const store = new Vuex.Store({
 
 window.onload = () => {
     // file upload component
-    let quizLoad = new Vue({
+    const quizLoad = new Vue({
         el: '#quizLoadInput',
         store,
         methods : {
             loadFile : () => {
-                store.commit('loadQuiz');
+                const reader = new FileReader();
+                // load file
+                reader.onload = () => {
+                    const quiz = JSON.parse(event.target.result); 
+                    // save the quiz data into app store
+                    store.commit('setQuiz', quiz);
+                };
+
+                reader.readAsText(event.target.files[0]);             
             }
         }
     });
