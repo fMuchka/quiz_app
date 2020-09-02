@@ -18,13 +18,19 @@ const store = new Vuex.Store({
 });
 
 
-
-
 window.onload = () => {
+
+    const app = new Vue({
+        el: '#app',
+        router,
+        store
+      });
+
     // file upload component
     const quizLoad = new Vue({
         el: '#quizLoadInput',
         store,
+        router,
         methods : {
             loadFile : () => {
                 const reader = new FileReader();
