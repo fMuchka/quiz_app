@@ -1,11 +1,11 @@
 import router from './router.js'
 import Vue from 'vue/dist/vue.js'
-import Vuex from 'vuex'
+import Vuex from 'vuex';
 
 // app store
 Vue.use(Vuex);
 const store = new Vuex.Store({
-    state: {
+     state: {
         quiz: null
     },
 
@@ -22,7 +22,7 @@ const store = new Vuex.Store({
     }
 });
 
-const app = new Vue({
+new Vue({
     el: '#app',
     router,
     store
