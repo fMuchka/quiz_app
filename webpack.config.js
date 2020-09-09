@@ -1,5 +1,6 @@
 const { VueLoaderPlugin } = require('vue-loader')
 const CopyPlugin = require('copy-webpack-plugin')
+const { use } = require('vue/types/umd')
 
 module.exports = {
   mode: 'production',
@@ -21,6 +22,10 @@ module.exports = {
       {
         test: /\.vue$/,
         use: 'vue-loader'
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: 'file-loader'
       }
     ]
   },
