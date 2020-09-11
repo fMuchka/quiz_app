@@ -1,6 +1,5 @@
 const { VueLoaderPlugin } = require('vue-loader')
 const CopyPlugin = require('copy-webpack-plugin')
-const { use } = require('vue/types/umd')
 
 module.exports = {
   mode: 'production',
@@ -22,10 +21,6 @@ module.exports = {
       {
         test: /\.vue$/,
         use: 'vue-loader'
-      },
-      {
-        test: /\.(png|svg|jpg|gif)$/,
-        use: 'file-loader'
       }
     ]
   },
@@ -33,7 +28,8 @@ module.exports = {
     new VueLoaderPlugin(),
     new CopyPlugin({
         patterns: [
-            { from: './src/index.html', to: 'index.html' }
+            { from: './src/index.html', to: 'index.html' },
+            { from: './src/assets/**', to: '/assets/' }
         ]
     })
   ]
