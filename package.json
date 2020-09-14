@@ -17,13 +17,14 @@
   },
   "homepage": "https://github.com/fMuchka/quiz_app#readme",
   "dependencies": {
+    "roboto-fontface": "^0.10.0",
     "vue": "^2.6.12",
     "vue-router": "^3.4.3",
     "vuex": "^3.5.1"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^6.1.0",
-    "css-loader": "^4.2.2",
+    "css-loader": "^4.3.0",
     "eslint": "^7.8.1",
     "eslint-loader": "^4.0.2",
     "eslint-plugin-vue": "^7.0.0-beta.3",

@@ -1,5 +1,5 @@
 import FileLoad from './pages/FileLoad.vue'
-import Wonderland from './pages/Wonderland.vue'
+import TeamCreate from './pages/TeamCreate.vue'
 import VueRouter from 'vue-router'
 import Vue from 'vue/dist/vue.js'
 
@@ -11,9 +11,9 @@ const routes = [
         component: FileLoad
     },
 
-    {   path: '/wonderland',
-        name: 'wonderland',
-        component: Wonderland
+    {   path: '/teamcreate',
+        name: 'teamcreate',
+        component: TeamCreate
     }
   ];
 

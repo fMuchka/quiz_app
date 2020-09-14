@@ -1,11 +1,17 @@
 <template>
   <div>
-    <h2>Here we load files</h2>
+    <img id="logo"
+         src="/src/assets/sviniPivemNezarmoutis_logo.png" 
+         alt="nope"
+    >
 
     <input id="quizLoadInput"
            type="file" 
            name="quiz-load"
+           title=" "
            v-on:change="loadFile()" />
+
+    <label for="quizLoadInput"> Open Quiz </label>
     <div>
       <b>Loaded data:</b>
       {{ loadedQuizData }}
@@ -37,4 +43,3 @@ export default {
   },
 };
 </script>
-

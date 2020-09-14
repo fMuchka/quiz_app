@@ -1,0 +1,41 @@
+:root{
+    --main-color: EAE2B7;
+    --secondary-color: F77F00;
+}
+
+html{
+    font-family: roboto;
+}
+
+body{
+    background-color: var(--main-color);
+}
+
+#logo{
+    height: 30vw;
+    display: flex;
+    margin: auto;
+}
+
+#quizLoadInput{
+    display: none;
+}
+
+label[for="quizLoadInput"] {
+    display: flex;
+    margin: auto;
+    color: white;
+    border-radius: 5px;
+    border: 1px solid var(--secondary-color);
+    background-color: var(--secondary-color);
+    width: 25vw;
+    font-size: 50px;
+    place-content: center;
+    padding: 10px 0;
+}
+
+label[for="quizLoadInput"]:hover {
+    cursor: pointer;
+    background-color: FCBF49;
+    color: 003049;
+}
