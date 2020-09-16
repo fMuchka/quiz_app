@@ -1,6 +1,8 @@
 <template>
   <div>
-    <h2>Here we load files</h2>
+    <h2 class="redcolor">
+      Here we load files
+    </h2>
 
     <input id="quizLoadInput"
            type="file" 
@@ -37,4 +39,9 @@ export default {
   },
 };
 </script>
+<style scoped>
+  .redcolor {
+    color: #FF0000;
+  }
+</style>
 

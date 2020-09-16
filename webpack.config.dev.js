@@ -1,6 +1,7 @@
 const { VueLoaderPlugin } = require('vue-loader')
 const CopyPlugin = require('copy-webpack-plugin')
 const {HotModuleReplacementPlugin} = require('webpack')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
   devServer: {
@@ -35,6 +36,14 @@ module.exports = {
                 sourceMap: true
             }
         }]
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'vue-style-loader',
+          MiniCssExtractPlugin.loader,
+          'css-loader'
+        ]
       }
     ]
   },
@@ -46,6 +55,7 @@ module.exports = {
             { from: './src/index.html', to: 'index.html' },
             { from: './src/assets/**', to: '/assets/' }
         ]
-    })
+    }),
+    new MiniCssExtractPlugin()
   ]
 }
