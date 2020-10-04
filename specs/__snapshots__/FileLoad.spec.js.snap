@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FileLoad Page: html structure is correct 1`] = `
+<div>
+  <img
+    alt="nope"
+    id="logo"
+    src="/src/assets/sviniPivemNezarmoutis_logo.png"
+  />
+   
+  <input
+    id="quizLoadInput"
+    name="quiz-load"
+    title=" "
+    type="file"
+  />
+   
+  <label
+    for="quizLoadInput"
+  >
+     Open Quiz 
+  </label>
+   
+  <div>
+    <b>
+      Loaded data:
+    </b>
+    
+    
+  
+  </div>
+</div>
+`;
