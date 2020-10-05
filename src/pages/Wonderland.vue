@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Create Your Teams Madatracker</h2>
+    <h2>Here we always dream, never scream</h2>
   </div>
 </template>
 

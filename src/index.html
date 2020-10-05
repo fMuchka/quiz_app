@@ -1,31 +1,21 @@
 <html>
-    <style>
-        :root{
-        --main-color: EAE2B7;
-        --secondary-color: F77F00;
-        }
-
-        html{
-        font-family: roboto;
-        }
-
-        body{
-        background-color: var(--main-color);
-        }
-    </style>
     <head>
         <meta charset="UTF-8">
         <link rel="stylesheet" href="main.css">
-        <link rel="icon" href="assets/sviniPivemNezarmoutis_logo.png">
+        <link rel="icon" href="../quiz_app/src/assets/sviniPivemNezarmoutis_logo.png">
     </head>
     <body>
         <div id="app">
+            <img src="/src/assets/sviniPivemNezarmoutis_logo.png" 
+                 alt="nope"
+                >
+            <h1>Let's quiz it out!</h1>
             <p>
                 <!-- use router-link component for navigation. -->
                 <!-- specify the link by passing the `to` prop. -->
                 <!-- `<router-link>` will be rendered as an `<a>` tag by default -->
-                <router-link to="/fileload">File Load</router-link>
-                <router-link to="/teamcreate">Team Create</router-link>
+                <router-link to="/fileload">Go to File Load</router-link>
+                <router-link to="/wonderland">Go to Wonderland</router-link>
             </p>
             <!-- route outlet -->
             <!-- component matched by the route will render here -->

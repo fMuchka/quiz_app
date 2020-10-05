@@ -2,7 +2,7 @@
   "name": "quiz_app",
   "version": "0.0.1",
   "scripts": {
-    "test": "jest",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --config webpack.config.dev.js",
     "prod": "webpack --config webpack.config.js"
   },
@@ -17,26 +17,17 @@
   },
   "homepage": "https://github.com/fMuchka/quiz_app#readme",
   "dependencies": {
-    "jest": "^26.4.2",
     "vue": "^2.6.12",
     "vue-router": "^3.4.3",
     "vuex": "^3.5.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.11.6",
-    "@babel/preset-env": "^7.11.5",
-    "@testing-library/vue": "^5.1.0",
-    "@vue/test-utils": "^1.1.0",
-    "babel-core": "^7.0.0-bridge.0",
-    "babel-jest": "^26.3.0",
     "copy-webpack-plugin": "^6.1.0",
     "css-loader": "^4.2.2",
     "eslint": "^7.8.1",
     "eslint-loader": "^4.0.2",
     "eslint-plugin-vue": "^7.0.0-beta.3",
-    "jest-serializer-vue": "^2.0.2",
     "mini-css-extract-plugin": "^0.11.2",
-    "vue-jest": "^3.0.7",
     "vue-loader": "^15.9.3",
     "vue-style-loader": "^4.1.2",
     "vue-template-compiler": "^2.6.12",
