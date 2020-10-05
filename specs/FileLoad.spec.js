@@ -32,7 +32,7 @@ describe("FileLoad Page:", () => {
     expect(typeof FileLoad.methods.loadFile).toBe("function");
   });
 
-  it("should upload file", () => {
+  it("should handle file upload", () => {
     const wrapper = mount(FileLoad, {
       localVue,
       store,
@@ -41,30 +41,28 @@ describe("FileLoad Page:", () => {
     const event = {
       target: {
         files: [
-          {
-            name: "testQuiz.json",
-            size: 50000,
-          },
+          new File(["foo"], "testQuiz.json", {
+            type: "application/json",
+          }),
         ],
       },
     };
 
-    // Mock FileReader.readAsDataURL() to be a function that returns null
+    // Mock FileReader.readAsText() to be a function that returns null
     const fileReaderSpy = jest
-      .spyOn(FileReader.prototype, "readAsDataURL")
+      .spyOn(FileReader.prototype, "readAsText")
       .mockImplementation(() => null);
 
     // Spy on the component’s loadFile() method
     const loadSpy = jest.spyOn(wrapper.vm, "loadFile");
 
     // Manually trigger the component’s onChange() method
-    //  wrapper.find("[name='quiz-load']").$emit("change");
-    wrapper.vm.$emit("change");
+    wrapper.vm.loadFile(event);
 
-    // Assert that the FileReader object was called with the uploaded image
+    // Assert that the FileReader object was called with the uploaded file
     expect(fileReaderSpy).toHaveBeenCalledWith(event.target.files[0]);
 
-    // Assert that the component’s loadFile() method was called with the uploaded image
-    expect(loadSpy).toHaveBeenCalledWith(event.target.files[0]);
+    // Assert that the component’s loadFile() method was called with the uploaded file
+    expect(loadSpy).toHaveBeenCalledWith(event);
   });
 });
