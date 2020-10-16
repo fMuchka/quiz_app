@@ -11,6 +11,7 @@
       :item="item"
       :key="item.id"
       :index="index"
+      @remove="teamList.splice(index, 1)"
     />
   </div>
 </template>
@@ -26,9 +27,7 @@ export default {
   data() {
     return{
       nextTeamId: 1,
-      teamList: [
-        
-      ] 
+      teamList: [] 
     }
   },
 
@@ -40,8 +39,7 @@ export default {
     addNewTeam(){
       this.teamList.push({
         id: this.nextTeamId++,
-        name: '',
-        color: ''
+        name: ''
       })
     }
   }

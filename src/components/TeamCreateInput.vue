@@ -5,23 +5,26 @@
       <label
         for="team-input">
 
-       Team {{ teamColor }}: 
+       Team {{ teamColor.label }}: 
       
        </label>
 
       <input 
         name="team-input"
+        v-model="teamName"
         type="text"
         />
 
         <button
           name="confirm-button"
+          v-on:click="confirmTeam"
         >
           CONFIRM
         </button>
 
         <button
           name="delete-button"
+          v-on:click="$emit('remove')"
         >
           DELETE
         </button>
@@ -34,7 +37,7 @@ export default {
   computed: {
       teamColor: {
           get() {
-              return 'PLACEHOLDER';
+              return this.$store.getters.availableColor;
           },
 
           set(){
@@ -43,8 +46,27 @@ export default {
       }
   },
 
+  data (){
+    return {
+      teamName: ''
+    }
+  },
+
   methods: {
-      
+      confirmTeam(){
+        const buttons = [this.$el.children[this.$el.children.length - 1], this.$el.children[this.$el.children.length - 2]]; 
+        
+        buttons.forEach((el) => {
+          el.remove();
+        });
+
+        const team = {
+          name: this.teamName,
+          color: this.teamColor.id
+        }
+
+        this.$store.commit("pushTeam", team);
+      }
   }
 }
 </script>
