@@ -8,12 +8,15 @@ const store = new Vuex.Store({
   state: {
     quiz: null,
     teams: [],
-    availableColor: [
-      {id: 'red', label: 'červený', used: false},
-      {id: 'blue', label: 'modrý', used: false},
-      {id: 'green', label: 'zelený', used: false},
-      {id: 'yellow', label: 'žlutý', used: false}
-    ]
+    colorList: [
+      { id: 'red', label: 'červený', used: false },
+      { id: 'blue', label: 'modrý', used: false },
+      { id: 'green', label: 'zelený', used: false },
+      { id: 'yellow', label: 'žlutý', used: false },
+      { id: 'purple', label: 'fialový', used: false },
+      { id: 'brown', label: 'hnědý', used: false },
+    ],
+    nextColorIndex: 1
   },
 
   mutations: {
@@ -24,7 +27,12 @@ const store = new Vuex.Store({
       state.teams.push(team);
     },
     changeColorStatus(state, input) {
-      state.availableColor[input.index].used = input.status;
+      state.colorList[input.index].used = input.status;
+    },
+    incrementColorIndex(state) {
+      if (state.nextColorIndex < state.colorList.length) {
+        state.nextColorIndex++;
+      }
     }
   },
 
@@ -32,21 +40,25 @@ const store = new Vuex.Store({
     quiz: (state) => {
       return state.quiz;
     },
-    availableColor: (state) => {
-      const colors = state.availableColor;
+    color: (state) => {
+      const colors = state.colorList;
+      const freeIndex = state.nextColorIndex;
 
-      for (let i = 0; i < colors.length; i++) {
-        const color = colors[i];
-          
-        if (color.used === false) {
-          store.commit('changeColorStatus', {index: i, status: true});
-          return color;
-        }
+      if (freeIndex < colors.length) {
+        return colors[freeIndex];
       }
-      // no colors left
-      return false;
+      else {
+        // no colors left
+        return false;
+      }
+    },
+    nextColorIndex: (state) => {
+      return state.nextColorIndex;
+    },
+    colorListLength(state) {
+      return state.colorList.length;
     }
-  },
+  }
 });
 
 new Vue({

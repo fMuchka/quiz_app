@@ -1,78 +1,62 @@
 <template>
-  <div 
-    class="input-wrapper"
-    >
-      <label
-        for="team-input">
+  <div class="input-wrapper">
+    <label for="team-input"> Team {{ color.label }}: </label>
 
-       Team {{ teamColor.label }}: 
-      
-       </label>
+    <input name="team-input" v-model="label" type="text" />
 
-      <input 
-        name="team-input"
-        v-model="teamName"
-        type="text"
-        />
+    <button name="confirm-button" v-on:click="confirmTeam">CONFIRM</button>
 
-        <button
-          name="confirm-button"
-          v-on:click="confirmTeam"
-        >
-          CONFIRM
-        </button>
-
-        <button
-          name="delete-button"
-          v-on:click="$emit('remove')"
-        >
-          DELETE
-        </button>
+    <button name="delete-button" v-on:click="$emit('remove')">DELETE</button>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'TeamCreateInput',
+  name: "TeamCreateInput",
   computed: {
-      teamColor: {
-          get() {
-              return this.$store.getters.availableColor;
-          },
+    color: {
+      get() {
+        return this.$props.team.color;
+      },
 
-          set(){
-            
-          }
-      }
+      set() {},
+    },
+  },
+  props: {
+    index: Number,
+    team: Object,
   },
 
-  data (){
+  data() {
     return {
-      teamName: ''
-    }
+      label: this.$props.team.label,
+    };
   },
 
   methods: {
-      confirmTeam(){
-        const buttons = [this.$el.children[this.$el.children.length - 1], this.$el.children[this.$el.children.length - 2]]; 
-        
-        buttons.forEach((el) => {
-          el.remove();
-        });
+    confirmTeam() {
+      const buttons = [
+        this.$el.children[this.$el.children.length - 1],
+        this.$el.children[this.$el.children.length - 2],
+      ];
 
-        const team = {
-          name: this.teamName,
-          color: this.teamColor.id
-        }
+      buttons.forEach((el) => {
+        el.remove();
+      });
 
-        this.$store.commit("pushTeam", team);
-      }
-  }
-}
+      const team = {
+        label: this.label,
+        color: this.color.id,
+      };
+
+      this.$store.commit("pushTeam", team);
+    },
+  },
+};
 </script>
 
 <style>
-.input-wrapper{
-    display: flex;
-} 
+.input-wrapper {
+  display: flex;
+}
 </style>
