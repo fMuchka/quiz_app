@@ -9,12 +9,12 @@ const store = new Vuex.Store({
     quiz: null,
     teams: [],
     colorList: [
-      { id: 'red', label: 'červený', used: false },
-      { id: 'blue', label: 'modrý', used: false },
-      { id: 'green', label: 'zelený', used: false },
-      { id: 'yellow', label: 'žlutý', used: false },
-      { id: 'purple', label: 'fialový', used: false },
-      { id: 'brown', label: 'hnědý', used: false },
+      { id: 'red', label: 'Červený', used: false },
+      { id: 'blue', label: 'Modrý', used: false },
+      { id: 'green', label: 'Zelený', used: false },
+      { id: 'yellow', label: 'Žlutý', used: false },
+      { id: 'purple', label: 'Fialový', used: false },
+      { id: 'brown', label: 'Hnědý', used: false },
     ]
   },
 

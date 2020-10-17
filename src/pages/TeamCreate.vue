@@ -1,5 +1,9 @@
 <template>
-  <div>
+  <div id="pageWrapper">
+    <label for="addButton">Přidat tým</label>
+    <button id="addButton" v-on:click="addTeamInput" :disabled="isAddDisabled">
+      +
+    </button>
     <team-create-input
       v-for="(team, index) in teamList"
       :team="teamList[index]"
@@ -7,12 +11,6 @@
       :index="index"
       @remove="removeTeamInput(index, team.color.id)"
     />
-
-    <button
-      id="addButton"
-      v-on:click="addTeamInput"
-      :disabled="isAddDisabled"
-    ></button>
   </div>
 </template>
 
@@ -69,26 +67,41 @@ export default {
 };
 </script>
 <style scoped>
+#pageWrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+label[for="addButton"] {
+  font-size: 20px;
+  margin-bottom: 0.5rem;
+  user-select: none;
+  font-weight: bold;
+}
+
 #addButton {
   width: 50px;
   height: 50px;
   display: inline-block;
-
-  background: linear-gradient(#000, #000) top left,
-    linear-gradient(#000, #000) top right,
-    linear-gradient(#000, #000) bottom left,
-    linear-gradient(#000, #000) bottom right;
-  background-size: calc(50% - 1px) calc(50% - 1px); /*thickness = 2px (2*1px) */
-  background-repeat: no-repeat;
-  border: 10px solid #000; /*length = 30px (50px - 2x10px) */
-  box-sizing: border-box;
+  font-size: xx-large;
+  color: var(--main-color);
+  background-color: var(--secondary-color);
   border-radius: 50%;
+  border: none;
+  outline: none;
+  user-select: none;
+
+  margin-bottom: 2.5rem;
 }
-#addButton:hover {
+#addButton:hover,
+label[for="addButton"] {
   cursor: pointer;
+  color: 003049;
 }
 
 #addButton:disabled {
-  display: none;
+  cursor: not-allowed;
+  background-color: #e00000;
 }
 </style>
