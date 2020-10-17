@@ -1,14 +1,18 @@
 <template>
   <div>
-    <button id="addButton" v-on:click="addNewTeam"></button>
-
     <team-create-input
       v-for="(team, index) in teamList"
       :team="teamList[index]"
       :key="team.id"
       :index="index"
-      @remove="teamList.splice(index, 1)"
+      @remove="removeTeamInput(index, team.color.id)"
     />
+
+    <button
+      id="addButton"
+      v-on:click="addTeamInput"
+      :disabled="isAddDisabled"
+    ></button>
   </div>
 </template>
 
@@ -22,30 +26,44 @@ export default {
 
   data() {
     return {
-      nextTeamId: 1,
+      nextTeamId: 0,
       teamList: [],
     };
   },
 
-  computed: {},
+  computed: {
+    isAddDisabled: function () {
+      const freeIndex = this.$store.getters.nextColorIndex;
+
+      if (freeIndex === false) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  },
 
   methods: {
-    addNewTeam() {
-      const freeIndex = this.$store.getters.nextColorIndex;
-      const colorListLength = this.$store.getters.colorListLength;
-      if (freeIndex < colorListLength) {
-        this.teamList.push({
-          id: this.nextTeamId++,
-          label: "",
-          color: this.$store.getters.color,
-        });
+    addTeamInput() {
+      const color = this.$store.getters.color;
 
-        this.$store.commit("incrementColorIndex");
-        this.$store.commit("changeColorStatus", {
-          index: freeIndex,
-          status: true,
-        });
-      }
+      this.teamList.push({
+        id: this.nextTeamId++,
+        color: color,
+      });
+
+      this.$store.commit("changeColorStatus", {
+        id: color.id,
+        status: true,
+      });
+    },
+    removeTeamInput(index, colorId) {
+      this.teamList.splice(index, 1);
+
+      this.$store.commit("changeColorStatus", {
+        id: colorId,
+        status: false,
+      });
     },
   },
 };
@@ -68,5 +86,9 @@ export default {
 }
 #addButton:hover {
   cursor: pointer;
+}
+
+#addButton:disabled {
+  display: none;
 }
 </style>

@@ -1,18 +1,31 @@
 <template>
   <div class="input-wrapper">
-    <label for="team-input"> Team {{ color.label }}: </label>
+    <label for="team-input"> {{ color.label }} tým: </label>
 
-    <input name="team-input" v-model="label" type="text" />
+    <input
+      name="team-input"
+      v-model="label"
+      :readonly="isInputDisabled"
+      type="text"
+    />
 
-    <button name="confirm-button" v-on:click="confirmTeam">CONFIRM</button>
+    <button name="confirm-button" v-on:click="confirmTeam">✓</button>
 
-    <button name="delete-button" v-on:click="$emit('remove')">DELETE</button>
+    <button name="delete-button" v-on:click="$emit('remove')">✗</button>
   </div>
 </template>
 
 <script>
 export default {
   name: "TeamCreateInput",
+
+  data() {
+    return {
+      label: this.$props.team.label,
+      isInputDisabled: false,
+    };
+  },
+
   computed: {
     color: {
       get() {
@@ -25,12 +38,6 @@ export default {
   props: {
     index: Number,
     team: Object,
-  },
-
-  data() {
-    return {
-      label: this.$props.team.label,
-    };
   },
 
   methods: {
@@ -50,6 +57,7 @@ export default {
       };
 
       this.$store.commit("pushTeam", team);
+      this.isInputDisabled = true;
     },
   },
 };

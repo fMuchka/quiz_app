@@ -15,8 +15,7 @@ const store = new Vuex.Store({
       { id: 'yellow', label: 'žlutý', used: false },
       { id: 'purple', label: 'fialový', used: false },
       { id: 'brown', label: 'hnědý', used: false },
-    ],
-    nextColorIndex: 1
+    ]
   },
 
   mutations: {
@@ -27,11 +26,14 @@ const store = new Vuex.Store({
       state.teams.push(team);
     },
     changeColorStatus(state, input) {
-      state.colorList[input.index].used = input.status;
-    },
-    incrementColorIndex(state) {
-      if (state.nextColorIndex < state.colorList.length) {
-        state.nextColorIndex++;
+      const { id, status } = input;
+      const colorList = state.colorList;
+
+      for (let i = 0; i < colorList.length; i++) {
+        if (colorList[i].id === id) {
+          colorList[i].used = status;
+          break;
+        }
       }
     }
   },
@@ -42,18 +44,27 @@ const store = new Vuex.Store({
     },
     color: (state) => {
       const colors = state.colorList;
-      const freeIndex = state.nextColorIndex;
+      const freeIndex = store.getters.nextColorIndex;
+
+      if (freeIndex === false) {
+        // no colors left
+        return false;
+      }
 
       if (freeIndex < colors.length) {
         return colors[freeIndex];
       }
-      else {
-        // no colors left
-        return false;
-      }
+
     },
     nextColorIndex: (state) => {
-      return state.nextColorIndex;
+      const colorList = state.colorList;
+
+      for (let i = 0; i < colorList.length; i++) {
+        if (colorList[i].used === false) {
+          return i;
+        }
+      }
+      return false;
     },
     colorListLength(state) {
       return state.colorList.length;
