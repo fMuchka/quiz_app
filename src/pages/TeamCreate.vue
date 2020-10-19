@@ -1,7 +1,7 @@
 <template>
   <div id="pageWrapper">
     <label for="addButton">Přidat tým</label>
-    <button id="addButton" v-on:click="addTeamInput" :disabled="isAddDisabled">
+    <button id="addButton" @click="addTeamInput()" :disabled="isAddDisabled">
       +
     </button>
     <team-create-input

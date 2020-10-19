@@ -1,3 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`TeamCreate Page: html structure is correct 1`] = `<div />`;
+exports[`TeamCreate Page: html structure is correct 1`] = `
+<div
+  id="pageWrapper"
+>
+  <label
+    for="addButton"
+  >
+    Přidat tým
+  </label>
+   
+  <button
+    id="addButton"
+  >
+    
+    +
+  
+  </button>
+   
+</div>
+`;

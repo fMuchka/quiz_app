@@ -18,7 +18,7 @@ exports[`FileLoad Page: html structure is correct 1`] = `
   <label
     for="quizLoadInput"
   >
-     Open Quiz 
+     Otevři kvíz 
   </label>
    
   <div>
