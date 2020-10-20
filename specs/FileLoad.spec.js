@@ -19,7 +19,7 @@ describe("FileLoad Page:", () => {
     });
   });
 
-  it("html structure is correct", () => {
+  it("matches snapshot", () => {
     const wrapper = mount(FileLoad, {
       localVue,
       store,

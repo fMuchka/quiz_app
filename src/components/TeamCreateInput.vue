@@ -1,6 +1,6 @@
 <template>
   <div class="input-wrapper">
-    <label for="team-input" :style="textColor"> {{ color.label }} tým </label>
+    <label for="team-input" :style="textColor">{{ color.label }} tým</label>
 
     <input
       name="team-input"
@@ -9,9 +9,9 @@
       type="text"
     />
 
-    <button name="confirm-button" v-on:click="confirmTeam">✓</button>
+    <button name="confirm-button" @click="confirmTeam()" :disabled="isConfirmDisabled">✓</button>
 
-    <button name="delete-button" v-on:click="$emit('remove')">✗</button>
+    <button name="delete-button" @click="$emit('remove')">✗</button>
   </div>
 </template>
 
@@ -21,8 +21,8 @@ export default {
 
   data() {
     return {
-      label: this.$props.team.label,
-      isInputDisabled: false,
+      label: '',
+      inputDisabled: false
     };
   },
 
@@ -35,8 +35,19 @@ export default {
       set() {},
     },
     textColor() {
-      return "color:" + this.$props.team.color.id;
+        return "color:" + this.$props.team.color.id;
     },
+    isConfirmDisabled(){
+        return (this.label.length > 0) ? false : true;
+    },
+    isInputDisabled: {
+      get(){
+        return this.inputDisabled;
+      },
+      set(status){
+        this.inputDisabled = status;
+      }
+    }
   },
   props: {
     index: Number,
