@@ -2,6 +2,7 @@ import Vuex from "vuex";
 import { mount, createLocalVue } from "@vue/test-utils";
 
 import FileLoad from "../src/pages/FileLoad.vue";
+import mainStore from "../src/store.js";
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -12,11 +13,7 @@ describe("FileLoad Page:", () => {
   // had to simulate store, otherwise would return error of undefined
   // guess it makes sense...
   beforeEach(() => {
-    store = new Vuex.Store({
-      state: {
-        quiz: null,
-      },
-    });
+    store = new Vuex.Store(mainStore);
   });
 
   it("matches snapshot", () => {

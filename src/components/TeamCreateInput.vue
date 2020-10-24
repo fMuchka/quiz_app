@@ -5,13 +5,26 @@
     <input
       name="team-input"
       v-model="label"
-      :readonly="isInputDisabled"
+      :readonly="isConfirmed"
       type="text"
     />
 
-    <button name="confirm-button" @click="confirmTeam()" :disabled="isConfirmDisabled">✓</button>
+    <button
+      name="confirm-button"
+      @click="confirmTeam()"
+      :disabled="isConfirmDisabled"
+      :style="buttonDisplay"
+    >
+      ✓
+    </button>
 
-    <button name="delete-button" @click="$emit('remove')">✗</button>
+    <button
+      name="delete-button"
+      @click="$emit('remove')"
+      :style="buttonDisplay"
+    >
+      ✗
+    </button>
   </div>
 </template>
 
@@ -21,8 +34,8 @@ export default {
 
   data() {
     return {
-      label: '',
-      inputDisabled: false
+      label: "",
+      confirmed: false,
     };
   },
 
@@ -31,23 +44,27 @@ export default {
       get() {
         return this.$props.team.color;
       },
-
       set() {},
     },
-    textColor() {
-        return "color:" + this.$props.team.color.id;
-    },
-    isConfirmDisabled(){
-        return (this.label.length > 0) ? false : true;
-    },
-    isInputDisabled: {
-      get(){
-        return this.inputDisabled;
+    buttonDisplay: {
+      get() {
+        return this.confirmed ? "display: none" : "";
       },
-      set(status){
-        this.inputDisabled = status;
-      }
-    }
+    },
+    textColor() {
+      return "color:" + this.$props.team.color.id;
+    },
+    isConfirmDisabled() {
+      return this.label.length > 0 ? false : true;
+    },
+    isConfirmed: {
+      get() {
+        return this.confirmed;
+      },
+      set(status) {
+        this.confirmed = status;
+      },
+    },
   },
   props: {
     index: Number,
@@ -56,22 +73,13 @@ export default {
 
   methods: {
     confirmTeam() {
-      const buttons = [
-        this.$el.children[this.$el.children.length - 1],
-        this.$el.children[this.$el.children.length - 2],
-      ];
-
-      buttons.forEach((el) => {
-        el.remove();
-      });
-
       const team = {
         label: this.label,
         color: this.color.id,
       };
 
       this.$store.commit("pushTeam", team);
-      this.isInputDisabled = true;
+      this.isConfirmed = true;
     },
   },
 };
@@ -96,6 +104,10 @@ export default {
 
 #pageWrapper * button {
   margin: 0 5px;
+}
+
+input:read-only {
+  background-color: lightgrey;
 }
 
 button[name="confirm-button"] {

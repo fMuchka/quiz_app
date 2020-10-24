@@ -20,13 +20,17 @@ exports[`TeamCreateInput Component: matches snapshot 1`] = `
     disabled="disabled"
     name="confirm-button"
   >
+    
     ✓
+  
   </button>
    
   <button
     name="delete-button"
   >
+    
     ✗
+  
   </button>
 </div>
 `;
