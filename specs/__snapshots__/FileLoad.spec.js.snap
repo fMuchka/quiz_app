@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FileLoad Page: html structure is correct 1`] = `
+exports[`FileLoad Page: matches snapshot 1`] = `
 <div>
   <img
     alt="nope"
@@ -18,7 +18,7 @@ exports[`FileLoad Page: html structure is correct 1`] = `
   <label
     for="quizLoadInput"
   >
-     Open Quiz 
+     Otevři kvíz 
   </label>
    
   <div>

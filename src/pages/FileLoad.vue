@@ -14,7 +14,7 @@
       v-on:change="loadFile"
     />
 
-    <label for="quizLoadInput"> Open Quiz </label>
+    <label for="quizLoadInput"> Otevři kvíz </label>
     <div>
       <b>Loaded data:</b>
       {{ loadedQuizData }}
@@ -72,7 +72,6 @@ label[for="quizLoadInput"] {
 
 label[for="quizLoadInput"]:hover {
   cursor: pointer;
-  background-color: FCBF49;
   color: 003049;
 }
 </style>

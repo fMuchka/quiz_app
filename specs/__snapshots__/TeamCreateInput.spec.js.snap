@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TeamCreateInput Component: matches snapshot 1`] = `
+<div
+  class="input-wrapper"
+>
+  <label
+    for="team-input"
+    style="color: red;"
+  >
+    Červený tým
+  </label>
+   
+  <input
+    name="team-input"
+    type="text"
+  />
+   
+  <button
+    disabled="disabled"
+    name="confirm-button"
+  >
+    
+    ✓
+  
+  </button>
+   
+  <button
+    name="delete-button"
+  >
+    
+    ✗
+  
+  </button>
+</div>
+`;
