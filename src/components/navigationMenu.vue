@@ -50,9 +50,9 @@ export default {
 </script>
 
 <style>
-.router-link-active{
-  color: 003049 !important;
-  background-color: var(--main-color) !important;
+#menu > a.router-link-active{
+  color: 003049;
+  background-color: var(--main-color);
 }
 
 label[for="menu-icon"] > div{
