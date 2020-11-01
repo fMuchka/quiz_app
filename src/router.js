@@ -1,5 +1,3 @@
-import FileLoad from './pages/FileLoad.vue'
-import TeamCreate from './pages/TeamCreate.vue'
 import VueRouter from 'vue-router'
 import Vue from 'vue/dist/vue.js'
 
@@ -8,13 +6,18 @@ Vue.use(VueRouter)
 const routes = [
     {   path: '/fileload',
         name: 'fileload',
-        component: FileLoad
+        component: () => import('./pages/FileLoad.vue')
     },
 
     {   path: '/teamcreate',
         name: 'teamcreate',
-        component: TeamCreate
-    }
+        component: () => import('./pages/TeamCreate.vue')
+    },
+
+    {   path: '/themesoverview',
+        name: 'themesoverview',
+        component: () => import('./pages/ThemesOverview.vue')
+    },
   ];
 
 const router = new VueRouter({

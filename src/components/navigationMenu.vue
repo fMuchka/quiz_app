@@ -14,6 +14,11 @@
         <!-- `<router-link>` will be rendered as an `<a>` tag by default -->
         <router-link to="/fileload">Otevřít kvíz</router-link>
         <router-link to="/teamcreate">Tvorba týmů</router-link>
+        <router-link 
+          to="/themesoverview"
+          :disabled="!themesAvailable"
+          :event="themesAvailable ? 'click' : ''"      
+        >Přehled témat</router-link>
       </div>
         
   </div>
@@ -38,12 +43,23 @@ export default {
     },
     menuStyle() {
       return this.hidden ? 'left:-20%' : 'left:0px';
+    },
+    themesAvailable(){
+      const quiz = this.$store.state.quiz;
+
+      if (quiz === null)
+        return false;
+      else
+        return true;
     }
   },
 
   methods: {
     changeVisibility(){
       this.isMenuHidden = !this.isMenuHidden;
+    },
+    checkOutsideMenuClick(){
+      alert('outside')
     }
   }
 }
@@ -100,8 +116,8 @@ label[for="menu-icon"]:hover{
 
 #menu > a{
   display: flex;
-  width: 80%;
-  height: 45px;
+  width: 100%;
+  height: 50px;
   margin: 5px auto;
   place-content: center;
   align-items: center;
@@ -112,5 +128,10 @@ label[for="menu-icon"]:hover{
 
 #menu > a:hover {
   background-color: var(--main-color);
+}
+
+#menu > a[disabled="disabled"] {
+    cursor: not-allowed;
+    filter: grayscale(1);
 }
 </style>
