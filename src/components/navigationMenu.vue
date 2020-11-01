@@ -1,6 +1,6 @@
 <template>
-  <div>
-      <input id="menu-icon" @click="changeVisibility()" type="checkbox">
+  <div id="menu-wrapper">
+      <input id="menu-icon" @click="changeVisibility()" type="checkbox" :checked="!isMenuHidden">
       <label for="menu-icon">
         <div></div>
         <div></div>
@@ -26,6 +26,8 @@
 
 <script>
 export default {
+  name: "NavigationMenu",
+
   data(){
     return {
       hidden: true
@@ -57,9 +59,6 @@ export default {
   methods: {
     changeVisibility(){
       this.isMenuHidden = !this.isMenuHidden;
-    },
-    checkOutsideMenuClick(){
-      alert('outside')
     }
   }
 }
