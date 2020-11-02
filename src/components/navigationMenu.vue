@@ -29,22 +29,17 @@ export default {
   name: "NavigationMenu",
 
   data(){
-    return {
-      hidden: true
+    return{
+      
     }
   },
 
   computed: {
-    isMenuHidden: {
-      get() {
-        return this.hidden;
-      },
-      set(newState) {
-        this.hidden = newState;
-      }
+    isMenuHidden() {
+      return this.$store.getters.isMenuHidden
     },
     menuStyle() {
-      return this.hidden ? 'left:-20%' : 'left:0px';
+      return this.$store.getters.isMenuHidden ? 'left:-20%' : 'left:0px';
     },
     themesAvailable(){
       const quiz = this.$store.state.quiz;
@@ -58,7 +53,14 @@ export default {
 
   methods: {
     changeVisibility(){
-      this.isMenuHidden = !this.isMenuHidden;
+      const current = this.isMenuHidden;
+
+      if (current === true){
+        this.$store.commit("showMenu")
+      }
+       else{
+         this.$store.commit("hideMenu")
+       } 
     }
   }
 }

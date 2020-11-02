@@ -31,8 +31,7 @@ new Vue({
       const check = ev.path.find(element => element.id === "menu-wrapper");
       
       if (check === undefined) {
-        const navMenu = this.$children.find(element => element.$options._componentTag === "navigation-menu");
-        navMenu.isMenuHidden = true; 
+        this.$store.commit("hideMenu");
       }
     }
   }
