@@ -9,7 +9,8 @@ export default {
             { id: 'yellow', label: 'Žlutý', used: false },
             { id: 'purple', label: 'Fialový', used: false },
             { id: 'brown', label: 'Hnědý', used: false },
-        ]
+        ],
+        isMenuHidden: true
     },
 
     mutations: {
@@ -29,6 +30,12 @@ export default {
                     break;
                 }
             }
+        },
+        hideMenu(state) {
+            state.isMenuHidden = true;
+        },
+        showMenu(state) {
+            state.isMenuHidden = false;
         }
     },
 
@@ -62,6 +69,9 @@ export default {
         },
         colorListLength(state) {
             return state.colorList.length;
+        },
+        isMenuHidden(state) {
+            return state.isMenuHidden;
         }
     }
 };

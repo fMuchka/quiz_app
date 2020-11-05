@@ -1,6 +1,6 @@
 <template>
-  <div>
-      <input id="menu-icon" @click="changeVisibility()" type="checkbox">
+  <div id="menu-wrapper">
+      <input id="menu-icon" @click="changeVisibility()" type="checkbox" :checked="!isMenuHidden">
       <label for="menu-icon">
         <div></div>
         <div></div>
@@ -14,6 +14,11 @@
         <!-- `<router-link>` will be rendered as an `<a>` tag by default -->
         <router-link to="/fileload">Otevřít kvíz</router-link>
         <router-link to="/teamcreate">Tvorba týmů</router-link>
+        <router-link 
+          to="/themesoverview"
+          :disabled="!themesAvailable"
+          :event="themesAvailable ? 'click' : ''"      
+        >Přehled témat</router-link>
       </div>
         
   </div>
@@ -21,29 +26,41 @@
 
 <script>
 export default {
+  name: "NavigationMenu",
+
   data(){
-    return {
-      hidden: true
+    return{
+      
     }
   },
 
   computed: {
-    isMenuHidden: {
-      get() {
-        return this.hidden;
-      },
-      set(newState) {
-        this.hidden = newState;
-      }
+    isMenuHidden() {
+      return this.$store.getters.isMenuHidden
     },
     menuStyle() {
-      return this.hidden ? 'left:-20%' : 'left:0px';
+      return this.$store.getters.isMenuHidden ? 'left:-20%' : 'left:0px';
+    },
+    themesAvailable(){
+      const quiz = this.$store.state.quiz;
+
+      if (quiz === null)
+        return false;
+      else
+        return true;
     }
   },
 
   methods: {
     changeVisibility(){
-      this.isMenuHidden = !this.isMenuHidden;
+      const current = this.isMenuHidden;
+
+      if (current === true){
+        this.$store.commit("showMenu")
+      }
+       else{
+         this.$store.commit("hideMenu")
+       } 
     }
   }
 }
@@ -100,8 +117,8 @@ label[for="menu-icon"]:hover{
 
 #menu > a{
   display: flex;
-  width: 80%;
-  height: 45px;
+  width: 100%;
+  height: 50px;
   margin: 5px auto;
   place-content: center;
   align-items: center;
@@ -112,5 +129,10 @@ label[for="menu-icon"]:hover{
 
 #menu > a:hover {
   background-color: var(--main-color);
+}
+
+#menu > a[disabled="disabled"] {
+    cursor: not-allowed;
+    filter: grayscale(1);
 }
 </style>

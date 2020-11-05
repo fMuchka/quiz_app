@@ -14,5 +14,25 @@ new Vue({
   store,
   components: {
     navigationMenu
+  },
+
+  mounted: function () {
+    // Attach event listener to the root vue element
+    this.$el.addEventListener('click', this.outSideMenuClick)
+    // Or if you want to affect everything
+    // document.addEventListener('click', this.onClick)
+  },
+  beforeUnmount: function () {
+    this.$el.removeEventListener('click', this.outSideMenuClick)
+    // document.removeEventListener('click', this.onClick)
+  },
+  methods: {
+    outSideMenuClick: function (ev) {
+      const check = ev.path.find(element => element.id === "menu-wrapper");
+      
+      if (check === undefined) {
+        this.$store.commit("hideMenu");
+      }
+    }
   }
 });
