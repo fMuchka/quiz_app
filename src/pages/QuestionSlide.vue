@@ -40,11 +40,11 @@
 export default {
     data(){
         return{
-            d_questionText: "Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. ",
-            d_themeLabel: "Téma",
-            d_questionIdentity: "Otázka č.XX",
-            d_pointsInfo: {points: 3, step: 2},
-            d_progressInfo: 50,
+            d_questionText: this.$store.getters.currentQuestion.text,
+            d_themeLabel: this.$store.getters.currentTheme.title,
+            d_questionIdentity: this.$store.getters.currentQuestionIndex+1,
+            d_pointsInfo: {points: this.$store.getters.currentQuestion.points, step: this.$store.getters.currentQuestion.step},
+            d_progressInfo: this.$store.getters.currentQuestionIndex/(this.$store.getters.currentTheme.question.length-1)*100,
             maxBarSize: 0
         }
     },
@@ -54,10 +54,12 @@ export default {
             return this.d_themeLabel;
         },
         questionIdentity(){
-            return this.d_questionIdentity;
+            return `Otázka č.${this.d_questionIdentity}`;
         },
         pointsInfo(){
-            const {points, step} = this.d_pointsInfo;
+            //const {points, step} = this.d_pointsInfo;
+            const points = this.d_pointsInfo.points;
+            const step = this.d_pointsInfo.step;
             let firstPart;
             let secondPart;
             
@@ -79,16 +81,16 @@ export default {
 
             switch (step) {
                 case 1:
-                    secondPart = `po ${step} bodu.`;
+                    secondPart = `po ${step} bodu`;
                     break;
                 default:
-                    secondPart = `po ${step} bodech.`;
+                    secondPart = `po ${step} bodech`;
                     break;
             }
 
             // both values are same, no need for the second part
             if (points === step) {
-                return firstPart + ".";
+                return firstPart;
             }
             
             return [firstPart, secondPart].join(', ');
@@ -139,6 +141,10 @@ div#split-line {
 div#bottom-area {
     font-size: 40px;
     padding: 2%;
+}
+
+div#question-text {
+    text-align: center;
 }
 
 div#top-area {

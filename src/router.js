@@ -18,7 +18,8 @@ const routes = [
         name: 'themesoverview',
         component: () => import('./pages/ThemesOverview.vue')
     },
-    {   path: '/questionslide',
+    {   
+        path: '/questionslide',
         name: 'questionslide',
         component: () => import('./pages/QuestionSlide.vue')
     }

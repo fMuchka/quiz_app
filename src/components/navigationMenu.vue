@@ -19,7 +19,6 @@
           :disabled="!themesAvailable"
           :event="themesAvailable ? 'click' : ''"      
         >Přehled témat</router-link>
-        <router-link to="/questionslide">NÁČRT OTÁZKY</router-link>
       </div>
         
   </div>
