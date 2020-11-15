@@ -14,8 +14,16 @@
             <div 
                 id="bar"
                 :style=progressBar
-                >
-                {{progressInfo}}              
+                >            
+            </div>
+            <div
+                id="value">
+                {{progressInfo}}
+                </div>
+            <div 
+                id="remainder"
+                :style=barRemainder
+            >
             </div>
         </div>
     </div>
@@ -36,7 +44,8 @@ export default {
             d_themeLabel: "Téma",
             d_questionIdentity: "Otázka č.XX",
             d_pointsInfo: {points: 3, step: 2},
-            d_progressInfo: 50
+            d_progressInfo: 50,
+            maxBarSize: 0
         }
     },
 
@@ -88,11 +97,29 @@ export default {
             return this.d_progressInfo + "%";
         },
         progressBar(){
-            return "width:" +  this.progressInfo;
+            const barSize = this.barSize;
+            return `width: ${barSize}px`;
+        },
+        barRemainder(){
+            const remainderSize = this.remainderSize;
+            return `width: ${remainderSize}px`;
         },
         questionText(){
-            return this.d_questionText
+            return this.d_questionText;
+        },
+        barSize(){
+            return this.maxBarSize * (this.d_progressInfo/100);
+        },
+        remainderSize(){
+            return this.maxBarSize - this.barSize;
         }
+    },
+    mounted(){
+        this.$nextTick(function(){
+            const progressBarEl = document.getElementById("theme-progress-bar");
+            const maxBarSize = progressBarEl.offsetWidth;
+            this.maxBarSize = maxBarSize;
+        })
     }
 }
 </script>
@@ -120,6 +147,7 @@ div#top-area {
         ". q-identity ."
         "theme-label points-info theme-progress-bar";
     grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     justify-items: center;
     align-items: center;
 }
@@ -144,12 +172,23 @@ div#points-info {
 
 div#theme-progress-bar {
     grid-area: theme-progress-bar;
-    font-size: 40px;
-    width: 80%;
+    height: 40%;
+    width: 25vw;
     border: 1px solid black;
+    display: flex;
 }
 
 #bar{
     background-color: var(--secondary-color);
+}
+
+#remainder{
+    background-color: white;
+}
+
+#value{
+    position: absolute;
+    margin-left: 12.5rem;
+    font-size: 40px;
 }
 </style>
