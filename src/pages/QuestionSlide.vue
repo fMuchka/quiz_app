@@ -57,9 +57,7 @@ export default {
             return `Otázka č.${this.d_questionIdentity}`;
         },
         pointsInfo(){
-            //const {points, step} = this.d_pointsInfo;
-            const points = this.d_pointsInfo.points;
-            const step = this.d_pointsInfo.step;
+            const {points, step} = this.d_pointsInfo;
             let firstPart;
             let secondPart;
             

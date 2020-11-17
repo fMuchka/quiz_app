@@ -11,7 +11,7 @@ describe("QuestionSlide Page:", () => {
     let store;
 
     beforeEach(() => {
-        mainStore.quiz = {
+        mainStore.state.quiz = {
             "theme": [
                 {
                     "question": [
@@ -114,8 +114,36 @@ describe("QuestionSlide Page:", () => {
                 localVue,
                 store,
             });
-            
-            expect(wrapper.d_questionText).toBe(store.state.quiz.theme[0].question[0].text);
+   
+            expect(wrapper.vm.d_questionText).toBe(store.state.quiz.theme[0].question[0].text);
+        });
+
+        it("theme label", () => {
+            const wrapper = mount(QuestionSlide, {
+                localVue,
+                store,
+            });
+   
+            expect(wrapper.vm.d_themeLabel).toBe(store.state.quiz.theme[0].title);
+        });
+
+        it("question identity", () => {
+            const wrapper = mount(QuestionSlide, {
+                localVue,
+                store,
+            });
+   
+            expect(wrapper.vm.d_questionIdentity).toBe(1);
+        });
+
+        it("points info", () => {
+            const wrapper = mount(QuestionSlide, {
+                localVue,
+                store,
+            });
+   
+            expect(wrapper.vm.d_pointsInfo.points).toBe(store.state.quiz.theme[0].question[0].points);
+            expect(wrapper.vm.d_pointsInfo.step).toBe(store.state.quiz.theme[0].question[0].step);
         });
     })
 })

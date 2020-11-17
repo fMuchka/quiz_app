@@ -39,4 +39,19 @@ describe("ThemesOverview Page:", () => {
             expect(pageElements[i].children[0].text.includes(testThemes[i].title)).toBeTruthy()
         }
     });
+
+    it('opens first question on click', () => {
+        const wrapper = mount(ThemesOverview, {
+            localVue,
+            store
+        });
+        
+        const openSpy = jest.spyOn(wrapper.vm, "openFirstQuestion");
+        const button = wrapper.find("button");
+        button.trigger('click');
+
+        expect(openSpy).toHaveBeenCalled();
+
+        expect(store.state.currentIndexes.question).toBe(0);
+    });
 })

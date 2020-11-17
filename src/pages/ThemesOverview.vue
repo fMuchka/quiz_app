@@ -20,7 +20,7 @@ export default {
     methods:{
         openFirstQuestion(index){
             // go to first question of selected theme
-            this.$store.commit("setCurrentQuestionIndex", 1);
+            this.$store.commit("setCurrentQuestionIndex", 0);
             this.$store.commit("setCurrentThemeIndex", index);
             this.$router.push({   
                         name: 'questionslide'    
