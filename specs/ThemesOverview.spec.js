@@ -39,19 +39,30 @@ describe("ThemesOverview Page:", () => {
             expect(pageElements[i].children[0].text.includes(testThemes[i].title)).toBeTruthy()
         }
     });
-
+    
     it('opens first question on click', () => {
+        let check = false;
+        let router = {
+            push: ({ name }) => {
+                if (name === "questionslide") {
+                    check = true;
+                }
+            }
+        };
+
         const wrapper = mount(ThemesOverview, {
             localVue,
-            store
+            store,
+             mocks: {
+                $router: router
+            }
         });
         
-        const openSpy = jest.spyOn(wrapper.vm, "openFirstQuestion");
-        const button = wrapper.find("button");
+        const button = wrapper.find("#overviewWrapper > button:first-of-type");
         button.trigger('click');
 
-        expect(openSpy).toHaveBeenCalled();
-
         expect(store.state.currentIndexes.question).toBe(0);
+        expect(store.state.currentIndexes.theme).toBe(0);
+        expect(check).toBe(true);
     });
 })

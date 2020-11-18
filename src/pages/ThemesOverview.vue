@@ -1,7 +1,7 @@
 <template>
     <div id="overviewWrapper">
         <button v-for="(item, index) in themes" 
-            :key="item.id"
+            :key="index"
             @click="openFirstQuestion(index)"
             >
             {{ item.title }}  
@@ -23,7 +23,7 @@ export default {
             this.$store.commit("setCurrentQuestionIndex", 0);
             this.$store.commit("setCurrentThemeIndex", index);
             this.$router.push({   
-                        name: 'questionslide'    
+                        name: 'questionslide'  
             });
         }
     }

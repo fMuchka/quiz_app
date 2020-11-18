@@ -109,7 +109,7 @@ describe("QuestionSlide Page:", () => {
     });
     
     describe("has proper store values", () => {
-        it("question text", () => {
+        it("question text", async () => {
             const wrapper = mount(QuestionSlide, {
                 localVue,
                 store,
@@ -118,7 +118,7 @@ describe("QuestionSlide Page:", () => {
             expect(wrapper.vm.d_questionText).toBe(store.state.quiz.theme[0].question[0].text);
         });
 
-        it("theme label", () => {
+        it("theme label", async () => {
             const wrapper = mount(QuestionSlide, {
                 localVue,
                 store,
@@ -127,7 +127,7 @@ describe("QuestionSlide Page:", () => {
             expect(wrapper.vm.d_themeLabel).toBe(store.state.quiz.theme[0].title);
         });
 
-        it("question identity", () => {
+        it("question identity", async () => {
             const wrapper = mount(QuestionSlide, {
                 localVue,
                 store,
@@ -136,7 +136,7 @@ describe("QuestionSlide Page:", () => {
             expect(wrapper.vm.d_questionIdentity).toBe(1);
         });
 
-        it("points info", () => {
+        it("points info", async () => {
             const wrapper = mount(QuestionSlide, {
                 localVue,
                 store,

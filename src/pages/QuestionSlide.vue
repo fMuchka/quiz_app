@@ -19,11 +19,6 @@
             <div
                 id="value">
                 {{progressInfo}}
-                </div>
-            <div 
-                id="remainder"
-                :style=barRemainder
-            >
             </div>
         </div>
     </div>
@@ -44,8 +39,7 @@ export default {
             d_themeLabel: this.$store.getters.currentTheme.title,
             d_questionIdentity: this.$store.getters.currentQuestionIndex+1,
             d_pointsInfo: {points: this.$store.getters.currentQuestion.points, step: this.$store.getters.currentQuestion.step},
-            d_progressInfo: this.$store.getters.currentQuestionIndex/(this.$store.getters.currentTheme.question.length-1)*100,
-            maxBarSize: 0
+            d_progressInfo: this.$store.getters.currentQuestionIndex/(this.$store.getters.currentTheme.question.length-1)*100
         }
     },
 
@@ -97,29 +91,11 @@ export default {
             return this.d_progressInfo + "%";
         },
         progressBar(){
-            const barSize = this.barSize;
-            return `width: ${barSize}px`;
-        },
-        barRemainder(){
-            const remainderSize = this.remainderSize;
-            return `width: ${remainderSize}px`;
+            return `width: ${this.progressInfo}`;
         },
         questionText(){
             return this.d_questionText;
-        },
-        barSize(){
-            return this.maxBarSize * (this.d_progressInfo/100);
-        },
-        remainderSize(){
-            return this.maxBarSize - this.barSize;
         }
-    },
-    mounted(){
-        this.$nextTick(function(){
-            const progressBarEl = document.getElementById("theme-progress-bar");
-            const maxBarSize = progressBarEl.offsetWidth;
-            this.maxBarSize = maxBarSize;
-        })
     }
 }
 </script>
@@ -174,12 +150,13 @@ div#points-info {
     align-self: start;
 }
 
-div#theme-progress-bar {
+#theme-progress-bar {
     grid-area: theme-progress-bar;
     height: 40%;
     width: 25vw;
     border: 1px solid black;
     display: flex;
+    background-color: white;
 }
 
 #bar{
