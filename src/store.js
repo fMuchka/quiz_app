@@ -10,7 +10,11 @@ export default {
             { id: 'purple', label: 'Fialový', used: false },
             { id: 'brown', label: 'Hnědý', used: false },
         ],
-        isMenuHidden: true
+        isMenuHidden: true,
+        currentIndexes: {
+            theme: 0,
+            question: 0
+        }
     },
 
     mutations: {
@@ -36,6 +40,14 @@ export default {
         },
         showMenu(state) {
             state.isMenuHidden = false;
+        },
+
+        setCurrentQuestionIndex(state, index) {
+            state.currentIndexes.question = index;
+        },
+
+        setCurrentThemeIndex(state, index) {
+            state.currentIndexes.theme = index;
         }
     },
 
@@ -72,6 +84,20 @@ export default {
         },
         isMenuHidden(state) {
             return state.isMenuHidden;
+        },
+
+        currentThemeIndex(state) {
+            return state.currentIndexes.theme;
+        },
+        currentQuestionIndex(state) {
+            return state.currentIndexes.question;
+        },
+        currentTheme(state) {
+            return state.quiz.theme[state.currentIndexes.theme]
+        },
+
+        currentQuestion(state) {
+            return state.quiz.theme[state.currentIndexes.theme].question[state.currentIndexes.question];
         }
     }
 };
