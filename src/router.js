@@ -22,7 +22,12 @@ const routes = [
         path: '/questionslide',
         name: 'questionslide',
         component: () => import('./pages/QuestionSlide.vue')
-    }
+    },
+    {   
+        path: '/themeanswers',
+        name: 'themeanswers',
+        component: () => import('./pages/ThemeAnswers.vue')
+    },
   ];
 
 const router = new VueRouter({

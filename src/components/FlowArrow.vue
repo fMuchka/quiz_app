@@ -38,7 +38,7 @@ export default {
             if (this.isForward) {
                 if (questionIndex === (nOfQuestions - 1)) {
                     this.$router.push({   
-                        name: 'themesoverview'  
+                        name: 'themeanswers'  
                     });
                 }
                 else{
@@ -91,6 +91,19 @@ export default {
         height: 50px;
         background-color: grey;
         cursor: pointer;
+        transition: 0.5s ease all;
+    }
+
+    #background:hover{
+        background-color: var(--main-color);
+    }
+
+    #background.right:hover > #arrow{
+        border-left-color: 003049;
+    }
+
+    #background.left:hover > #arrow{
+        border-right-color: 003049;
     }
 
     #background.right{

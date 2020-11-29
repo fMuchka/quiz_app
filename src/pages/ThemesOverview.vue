@@ -32,11 +32,10 @@ export default {
 
 <style>
 #overviewWrapper {
-    display: grid;
-    place-items: center;
-    align-items: center;
+    display: flex;
+    flex-flow: wrap;
     height: 100%;
-    width: 60%;
+    width: 80%;
     margin: auto;
 }
 
@@ -44,8 +43,10 @@ export default {
     background-color: var(--secondary-color);
     color: white;
     border: none;
-    width: 90%;
+    width: 40%;
+    height: 160px;
     font-size: 64px;
+    margin: auto;
 }
 
 #overviewWrapper > button:hover {

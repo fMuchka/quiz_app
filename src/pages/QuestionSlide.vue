@@ -179,11 +179,10 @@ div#points-info {
 
 #bar{
     background-color: var(--secondary-color);
+    transition: 0.5s all ease;
 }
 
-#remainder{
-    background-color: white;
-}
+
 
 #value{
     position: absolute;
