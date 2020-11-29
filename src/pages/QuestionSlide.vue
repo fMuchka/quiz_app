@@ -8,7 +8,7 @@
             {{questionIdentity}}
         </div>
         <div id="points-info">
-            {{pointsInfo}}
+            {{pointsInfoText}}
         </div>
         <div id="theme-progress-bar">
             <div 
@@ -36,11 +36,11 @@
     <flow-arrow 
             :isForward="false"
             >
-        </flow-arrow>
-        <flow-arrow
-            :isForward="true"
-            >
-        </flow-arrow>
+    </flow-arrow>
+    <flow-arrow
+        :isForward="true"
+        >
+    </flow-arrow>
   </div>
 </template>
 
@@ -65,7 +65,13 @@ export default {
             return `Otázka č.${this.$store.getters.currentQuestionIndex+1}`;
         },
         pointsInfo(){
-            const {points, step} = {points: this.$store.getters.currentQuestion.points, step: this.$store.getters.currentQuestion.step};
+            const points = this.$store.getters.currentQuestion.points;
+            const step = this.$store.getters.currentQuestion.step; 
+
+            return {points: points, step: step};
+        },
+        pointsInfoText(){
+            const {points, step} = this.pointsInfo;
             let firstPart;
             let secondPart;
             

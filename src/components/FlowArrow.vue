@@ -32,30 +32,40 @@ export default {
 
     methods:{
         move(){
-            const questionIndex = this.$store.getters.currentQuestionIndex;
-            const nOfQuestions = this.$store.getters.currentTheme.question.length;
-
-            if (this.isForward) {
-                if (questionIndex === (nOfQuestions - 1)) {
-                    this.$router.push({   
-                        name: 'themeanswers'  
+            const nextPage = this.$attrs.nextPage;
+            
+            if(nextPage !== undefined){
+                this.$router.push({   
+                        name: nextPage  
                     });
-                }
-                else{
-                    this.$store.commit('nextQuestion');
-                }
-                
             }
             else{
-                if (questionIndex === 0) {
-                    this.$router.push({   
-                        name: 'themesoverview'  
-                    });
+
+                const questionIndex = this.$store.getters.currentQuestionIndex;
+                const nOfQuestions = this.$store.getters.currentTheme.question.length;
+
+                if (this.isForward) {
+                    if (questionIndex === (nOfQuestions - 1)) {
+                        this.$router.push({   
+                            name: 'themeanswers'  
+                        });
+                    }
+                    else{
+                        this.$store.commit('nextQuestion');
+                    }
+                    
                 }
                 else{
-                    this.$store.commit('previousQuestion');
-                }       
-            }
+                    if (questionIndex === 0) {
+                        this.$router.push({   
+                            name: 'themesoverview'  
+                        });
+                    }
+                    else{
+                        this.$store.commit('previousQuestion');
+                    }       
+                }
+            }   
         }
     }
 }

@@ -32,11 +32,22 @@
             </p>
         </div>
     </div>
+
+    <flow-arrow
+        :isForward="true"
+        :nextPage="'themesoverview'"
+        >
+    </flow-arrow>
   </div>
 </template>
 
 <script>
+import FlowArrow from "../components/FlowArrow.vue"
 export default {
+    components:{
+        FlowArrow
+    },
+    
     data(){
         return{
             questions: this.$store.getters.currentTheme.question,
