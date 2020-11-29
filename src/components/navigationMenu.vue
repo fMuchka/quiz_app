@@ -18,7 +18,9 @@
           to="/themesoverview"
           :disabled="!themesAvailable"
           :event="themesAvailable ? 'click' : ''"      
-        >Přehled témat</router-link>
+        >
+        Přehled témat
+        </router-link>
       </div>
         
   </div>
@@ -113,6 +115,7 @@ label[for="menu-icon"]:hover{
     width: 20%;
     transition: left ease-in 0.5s;
     justify-content: center;
+    z-index: 4;
 }
 
 #menu > a{

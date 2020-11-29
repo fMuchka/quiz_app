@@ -27,31 +27,45 @@
         <div id="question-text">
             {{questionText}}
         </div>
+
+        <div id="media">
+            <img alt="Ops Something went wrong" :src=mediaPath>
+        </div>
     </div>  
+
+    <flow-arrow 
+            :isForward="false"
+            >
+        </flow-arrow>
+        <flow-arrow
+            :isForward="true"
+            >
+        </flow-arrow>
   </div>
 </template>
 
 <script>
+import flowArrow from "../components/FlowArrow.vue"
+
 export default {
+    components: {
+        flowArrow
+    },
+
     data(){
         return{
-            d_questionText: this.$store.getters.currentQuestion.text,
-            d_themeLabel: this.$store.getters.currentTheme.title,
-            d_questionIdentity: this.$store.getters.currentQuestionIndex+1,
-            d_pointsInfo: {points: this.$store.getters.currentQuestion.points, step: this.$store.getters.currentQuestion.step},
-            d_progressInfo: this.$store.getters.currentQuestionIndex/(this.$store.getters.currentTheme.question.length-1)*100
         }
     },
 
     computed:{
         themeLabel(){
-            return this.d_themeLabel;
+            return this.$store.getters.currentTheme.title;
         },
         questionIdentity(){
-            return `Otázka č.${this.d_questionIdentity}`;
+            return `Otázka č.${this.$store.getters.currentQuestionIndex+1}`;
         },
         pointsInfo(){
-            const {points, step} = this.d_pointsInfo;
+            const {points, step} = {points: this.$store.getters.currentQuestion.points, step: this.$store.getters.currentQuestion.step};
             let firstPart;
             let secondPart;
             
@@ -88,13 +102,16 @@ export default {
             return [firstPart, secondPart].join(', ');
         },
         progressInfo(){
-            return this.d_progressInfo + "%";
+            return this.$store.getters.currentQuestionIndex/(this.$store.getters.currentTheme.question.length-1)*100 + "%";
         },
         progressBar(){
-            return `width: ${this.progressInfo}`;
+            return `width: ${this.$store.getters.currentQuestionIndex/(this.$store.getters.currentTheme.question.length-1)*100}%`;
         },
         questionText(){
-            return this.d_questionText;
+            return this.$store.getters.currentQuestion.text;
+        },
+        mediaPath(){
+            return this.$store.getters.currentQuestion.media;
         }
     }
 }
@@ -103,13 +120,14 @@ export default {
 <style scoped>
 div#wrapper {
     display: grid;
-    grid-template-rows: 25% 5% 70%;
+    grid-template-rows: 10% 1% 89%;
     height: 100%;
 }
 
 div#split-line {
     width: 100%;
     border-bottom: 5px solid #F77F00;
+    height: 1px;
 }
 
 div#bottom-area {
@@ -134,19 +152,19 @@ div#top-area {
 
 div#theme-label {
     grid-area: theme-label;
-    font-size: 40px;
+    font-size: 32px;
     }
 
 div#q-identity {
     grid-area: q-identity;
-    font-size: 40px;
+    font-size: 32px;
     text-decoration: underline;
     align-self: end;
 }
 
 div#points-info {
     grid-area: points-info;
-    font-size: 36px;
+    font-size: 28px;
     align-self: start;
 }
 
@@ -170,6 +188,5 @@ div#points-info {
 #value{
     position: absolute;
     margin-left: 12.5rem;
-    font-size: 40px;
 }
 </style>

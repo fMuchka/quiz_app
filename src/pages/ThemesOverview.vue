@@ -35,7 +35,7 @@ export default {
     display: grid;
     place-items: center;
     align-items: center;
-    height: 80%;
+    height: 100%;
     width: 60%;
     margin: auto;
 }
@@ -44,7 +44,6 @@ export default {
     background-color: var(--secondary-color);
     color: white;
     border: none;
-    height: 60%;
     width: 90%;
     font-size: 64px;
 }

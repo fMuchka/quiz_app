@@ -6,8 +6,8 @@
     </button>
     <team-create-input
       v-for="(team, index) in teamList"
-      :team="teamList[index]"
       :key="team.id"
+      :team="teamList[index]"
       :index="index"
       @remove="removeTeamInput(index, team.color.id)"
     />
