@@ -1,17 +1,17 @@
 import Vuex from "vuex";
 import { mount, createLocalVue } from "@vue/test-utils";
 
-import QuestionSlide from "../src/pages/QuestionSlide.vue";
+import ThemeAnswers from "../src/pages/ThemeAnswers.vue"
 import mainStore from "../src/store.js";
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
-describe("QuestionSlide Page:", () => {
-    let store;
+describe("ThemeAnswers Page:", () => {
+  let store;
 
     beforeEach(() => {
-        mainStore.state.quiz = {
+        let testQuiz = {
             "theme": [
                 {
                     "question": [
@@ -105,45 +105,31 @@ describe("QuestionSlide Page:", () => {
                 }
             ]
         };
+        mainStore.state.quiz = testQuiz;
         store = new Vuex.Store(mainStore);
     });
     
-    describe("has proper store values", () => {
-        it("question text", async () => {
-            const wrapper = mount(QuestionSlide, {
+    describe("Displays proper information:", () => {
+        it("theme label", () => {
+            const wrapper = mount(ThemeAnswers, {
                 localVue,
-                store,
+                store
             });
-   
-            expect(wrapper.vm.questionText).toBe(store.state.quiz.theme[0].question[0].text);
+
+            const currentTheme = store.getters.currentTheme;
+            
+            expect(wrapper.vm.themeLabel).toBe(currentTheme.title);
         });
 
-        it("theme label", async () => {
-            const wrapper = mount(QuestionSlide, {
+        it("theme questions", () => {
+            const wrapper = mount(ThemeAnswers, {
                 localVue,
-                store,
+                store
             });
-   
-            expect(wrapper.vm.themeLabel).toBe(store.state.quiz.theme[0].title);
-        });
 
-        it("question identity", async () => {
-            const wrapper = mount(QuestionSlide, {
-                localVue,
-                store,
-            });
-   
-            expect(wrapper.vm.questionIdentity.includes(1)).toBe(true);
+            const currentThemeQuestions = store.getters.currentTheme.question;
+            
+            expect(wrapper.vm.questions).toBe(currentThemeQuestions);
         });
-
-        it("points info", async () => {
-            const wrapper = mount(QuestionSlide, {
-                localVue,
-                store,
-            });
-   
-            expect(wrapper.vm.pointsInfo.points).toBe(store.state.quiz.theme[0].question[0].points);
-            expect(wrapper.vm.pointsInfo.step).toBe(store.state.quiz.theme[0].question[0].step);
-        });
-    })
-})
+    });
+});

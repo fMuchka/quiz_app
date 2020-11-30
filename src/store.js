@@ -48,7 +48,14 @@ export default {
 
         setCurrentThemeIndex(state, index) {
             state.currentIndexes.theme = index;
-        }
+        },
+
+        previousQuestion(state) {
+            state.currentIndexes.question--;
+        },
+        nextQuestion(state) {
+            state.currentIndexes.question++;
+        },
     },
 
     getters: {
