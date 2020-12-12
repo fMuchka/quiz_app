@@ -18,7 +18,7 @@
   "homepage": "https://github.com/fMuchka/quiz_app#readme",
   "dependencies": {
     "jest": "^26.4.2",
-    "vue": "^2.6.12",
+    "vue": "^3.0.3",
     "vue-router": "^3.4.3",
     "vuex": "^3.5.1"
   },
