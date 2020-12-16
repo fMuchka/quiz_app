@@ -78,7 +78,8 @@ export default {
         color: this.color.id,
       };
 
-      this.$store.commit("pushTeam", team);
+      //this.$store.commit("pushTeam", team);
+      this.$store.dispatch("createTeam", team);
       this.isConfirmed = true;
     },
   },

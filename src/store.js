@@ -14,7 +14,9 @@ export default {
         currentIndexes: {
             theme: 0,
             question: 0
-        }
+        },
+
+        scoreTemplate: {}
     },
 
     mutations: {
@@ -56,6 +58,32 @@ export default {
         nextQuestion(state) {
             state.currentIndexes.question++;
         },
+    },
+
+    actions: {
+        setupScoreTemplate({state}) {
+            const quiz = state.quiz;
+            let scoreTemplate = state.scoreTemplate;
+            let themes = [];
+
+            for (let i = 0; i < quiz.theme.length; i++) {
+                themes.push({
+                    score: 0,
+                    questionScores: new Array(quiz.theme[i].question.length)
+                });
+            }
+
+            scoreTemplate["themes"] = themes;
+            scoreTemplate["total"] = 0;
+        },
+
+        createTeam({ state, commit }, team) {
+            const scoreTemplate = state.scoreTemplate;
+
+            team["score"] = Object.assign({}, scoreTemplate);
+
+            commit("pushTeam", team);
+        }
     },
 
     getters: {

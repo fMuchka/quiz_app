@@ -28,6 +28,11 @@ const routes = [
         name: 'themeanswers',
         component: () => import('./pages/ThemeAnswers.vue')
     },
+    {   
+        path: '/scoreboard',
+        name: 'scoreboard',
+        component: () => import('./pages/ScoreBoard.vue')
+    },
   ];
 
 const router = new VueRouter({

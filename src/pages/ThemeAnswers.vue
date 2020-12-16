@@ -5,37 +5,37 @@
       </p>
     <div id="table">
         <div class="row headers">
-            <p>
+            <div>
                 #
-            </p>
-            <p>
+            </div>
+            <div>
                 Otázka
-            </p>
-            <p>
+            </div>
+            <div>
                 Odpověď
-            </p>
+            </div>
       </div>
         <div v-for="(item, index) in questions"
             :key="index"
             class="row"
         >
-            <p>
-                0{{ index+1 }}
-            </p> 
+            <div>
+                {{ index+1 }}
+            </div> 
 
-            <p>
+            <div>
                 {{ item.text }}
-            </p>
+            </div>
 
-            <p>
+            <div>
                 {{ item.answer }}
-            </p>
+            </div>
         </div>
     </div>
 
     <flow-arrow
         :isForward="true"
-        :nextPage="'themesoverview'"
+        :nextPage="'scoreboard'"
         >
     </flow-arrow>
   </div>
@@ -57,12 +57,13 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .row {
     display: grid;
     grid-template-columns: 5% 50% 45%;
     border-bottom: 1px solid black;
     text-align: center;
+    margin: 2% 0px;
 }
 
 #table {
@@ -88,4 +89,7 @@ export default {
     font-size: 40px;
 }
 
+.row > div {
+    align-self: self-end;
+}
 </style>
