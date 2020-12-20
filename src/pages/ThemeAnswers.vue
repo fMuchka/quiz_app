@@ -28,7 +28,7 @@
             </div>
 
             <div>
-                {{ item.answer }}
+                {{ item.answer.text }}
             </div>
         </div>
     </div>
@@ -50,8 +50,8 @@ export default {
     
     data(){
         return{
-            questions: this.$store.getters.currentTheme.question,
-            themeLabel: this.$store.getters.currentTheme.title
+            questions: this.$store.getters.currentThemeQuestions,
+            themeLabel: this.$store.getters.currentTheme.text
         }
     }
 }
