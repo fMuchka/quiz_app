@@ -14,7 +14,7 @@
           :key="index"
           :style="'color:' + item.color"
         >
-          {{item.label}}
+          <p>{{item.label}}</p>
 
           <div
             class="total-team-score"
@@ -97,9 +97,6 @@ export default {
 
   data(){
     return{
-      currentThemeStatic: this.$store.getters.currentTheme,
-      currentThemeIDStatic: this.$store.state.currentThemeID,
-
       chartOptions: {
           legend: {
             display: false
@@ -240,7 +237,7 @@ export default {
     width: 100%;
     display: grid;
     align-items: center;
-    grid-template-rows: 40%;
+    grid-template-rows: 70%;
 }
 
 .total-team-score {
