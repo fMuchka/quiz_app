@@ -1,138 +1,125 @@
 <template>
-  <div id="wrapper">
 
-    <div
-      id="theme-switch"
-    >
-      
-      <div
-        v-if="previousThemeLabel === false"
-        id="prev-theme"
-      >
-      </div>
-      <div 
-        v-else
-        id="prev-theme"    
-      >
-        <p
-          @click="previousTheme()"
-        >{{previousThemeLabel}}</p>
+  <div>
+     <mini-chart 
+        id="mini-chart"
+        :chartData="chartData" 
+        :options="chartOptions"
+      />
+
+    <div id="wrapper">
+      <div id="teams-wrapper">
         <div
-          id="arrow-left" 
-          @click="previousTheme()"
+          v-for="(item, index) in teams"
+          :key="index"
+          :style="'color:' + item.color"
         >
-        </div>
-      </div>
-      
+          {{item.label}}
 
-      <div
-        id="current-theme"
-        v-if="currentThemeStatic !== currentTheme"
-      >
-        <p
-          @click="returnToCurrentTheme()"
-        >{{currentThemeStatic.text}}</p>
-      </div>
-
-      <div
-        v-if="nextThemeLabel === false"
-        id="next-theme"
-      >
-      </div>
-      <div 
-        v-else
-        id="next-theme"  
-      >
-        <div
-          id="arrow-right" 
-          @click="nextTheme()"
-        >
-        </div>
-        <p
-          @click="nextTheme()"
-        >{{nextThemeLabel}}</p>
-      </div>
-    </div>
-
-    <div id="teams-wrapper">
-      <div
-        v-for="(item, index) in teams"
-        :key="index"
-        :style="'color:' + item.color"
-      >
-        {{item.label}}
-
-        <div
-          class="total-team-score"
-        >
-          {{getTeamTotal(index)}}
-        </div>
-
-      </div>
-    </div>
-
-    <div
-      id="theme-label"
-    >
-      {{currentTheme.text}}
-    </div>
-
-    <div
-      id="questions"
-    >
-      <div
-        v-for="q in currentTheme.questions"
-        :key="q"
-      >
-        {{questions[q].text}}
-      </div>
-    </div>
-
-    <div
-      id="input-table"
-    >
-      <div
-        class="input-column"
-        v-for="(t, tKey) in teams"
-        :key="tKey"
-      >
-        <div
-          class="input-wrapper"
-          v-for="(q, qKey) in currentTheme.questions"
-          :key="qKey"
-        >
-          <input
-            type="number"
-            v-model.number="t.score.questions[q]"
-            :step="questions[q].points.increment"
-            :max="questions[q].points.max"
-            min="0"
+          <div
+            class="total-team-score"
           >
+            {{getTeamTotal(index)}}
+          </div>
+
         </div>
       </div>
-      
-    </div>
 
-    <flow-arrow
-        :isForward="true"
-        :nextPage="'themesoverview'"
+      <select 
+        id="theme-selector" 
+        v-model="currentThemeID"
+      >
+        <option 
+          v-for="(t, key) in themes"
+          :key="key"
+          :value="key"
         >
-    </flow-arrow>
+        {{t.text}}
+        </option>
+      </select>
+    
+      <div
+        id="questions"
+      >
+        <div
+          v-for="q in currentTheme.questions"
+          :key="q"
+        >
+          {{questions[q].text}}
+        </div>
+      </div>
+
+      <div
+        id="input-table"
+      >
+        <div
+          class="input-column"
+          v-for="(t, tKey) in teams"
+          :key="tKey"
+        >
+          <div
+            class="input-wrapper"
+            v-for="(q, qKey) in currentTheme.questions"
+            :key="qKey"
+          >
+            <input
+              type="number"
+              v-model.number="t.score.questions[q]"
+              :step="questions[q].points.increment"
+              :max="questions[q].points.max"
+              min="0"
+            >
+          </div>
+        </div>
+        
+      </div>
+
+      <flow-arrow
+          :isForward="true"
+          :nextPage="'themesoverview'"
+          >
+      </flow-arrow>
+    </div>
   </div>
+  
 </template>
 
 <script>
 import FlowArrow from "../components/FlowArrow.vue"
+import MiniChart from "../components/MiniChart.vue"
+
 export default {
   name: 'ScoreBoard',
   components:{
-    FlowArrow
+    FlowArrow,
+    MiniChart
   },
 
   data(){
     return{
       currentThemeStatic: this.$store.getters.currentTheme,
-      currentThemeIDStatic: this.$store.state.currentThemeID
+      currentThemeIDStatic: this.$store.state.currentThemeID,
+
+      chartOptions: {
+          legend: {
+            display: false
+          },
+          scales: {
+              xAxes: [{
+                display: true,
+                ticks: {
+                    suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
+                    // OR //
+                    beginAtZero: true   // minimum value will be 0.
+                }
+              }],
+              yAxes: [{
+                
+              }]
+          },
+          responsive: true,
+          maintainAspectRatio: false
+      }
     }
   },
 
@@ -153,29 +140,48 @@ export default {
       return this.$store.getters.currentTheme;
     },
 
-    previousThemeLabel(){
-      const currentIndex = this.$store.getters.currentThemeIndex;
-      const previous = this.$store.state.quiz.flow[currentIndex - 1];
-
-      if (previous === undefined) {
-        return false;
-      }
-      else{
-        return this.themes[previous].text;
+    currentThemeID:{
+      set(value){
+        this.$store.commit("setCurrentTheme", value);
+      },
+      get(){
+        return this.$store.state.currentThemeID;
       }
     },
 
-    nextThemeLabel(){
-      const currentIndex = this.$store.getters.currentThemeIndex;
-      const previous = this.$store.state.quiz.flow[currentIndex + 1];
+    chartData(){
+      const data = {
+        datasets: [
+            {
+              data: this.$store.getters.teamTotalScores,
+              label: "",
+              backgroundColor: this.$store.getters.teamColors
+            },   
+          ],
 
-      if (previous === undefined) {
-        return false;
-      }
-      else{
-        return this.themes[previous].text;
-      }
+          labels: this.$store.getters.teamLabels
+      };
+      return data;
     }
+  },
+
+  watch:{
+    teams:{
+      deep: true,
+
+      handler(){
+        for (let i = 0; i < this.teams.length; i++) {
+          const score = this.teams[i].score; 
+          let sum = 0;
+
+          for (const q in score.questions) {
+            sum += score.questions[q];
+          }
+
+          score.total = sum;
+        }
+      }
+    } 
   },
 
   methods:{
@@ -195,28 +201,16 @@ export default {
 
       return sum;
     },
-
-    nextTheme(){
-      this.$store.dispatch("nextTheme");
-    },
-
-    previousTheme(){
-      this.$store.dispatch("previousTheme");
-    },
-
-    returnToCurrentTheme(){
-      this.$store.commit("setCurrentTheme", this.currentThemeIDStatic);
-    }
-}
+  }
 }
 </script>
 
 <style scoped>
 
 #wrapper{
-      display: grid;
+    display: grid;
     grid-template-areas:
-        "switch teams"
+        "label teams"
         "label teams"
         "questions inputs";
     height: 80%;
@@ -224,15 +218,14 @@ export default {
     margin: auto;
     grid-template-columns: 30% 70%;
     grid-template-rows: 10% 10% 80%;
-    top: 5rem;
     position: relative;
+    border: 1px solid black;
 }
 
-#theme-switch {
-    grid-area: switch;
-    display: grid;
-    grid-template-areas: "prev current next";
-    grid-template-columns: 1fr 1fr 1fr;
+#mini-chart {
+    height: 10rem;
+    width: 80%;
+    margin: auto;
 }
 
 #teams-wrapper {
@@ -241,7 +234,7 @@ export default {
 }
 
 #teams-wrapper > div {
-    font-size: 24px;
+    font-size: 32px;
     text-align: center;
     height: 100%;
     width: 100%;
@@ -257,16 +250,20 @@ export default {
     align-items: center;
     justify-content: space-evenly;
     border-bottom: 3px solid black;
+    border-top: 1px solid black;
 }
 
-#theme-label {
+#theme-selector {
     grid-area: label;
     align-self: center;
-    text-align: center;
+    display: flex;
+    justify-content: center;
     font-size: 48px;
     height: 100%;
     font-weight: bold;
-    border-bottom: 3px solid black;
+    border: none;
+    text-align-last: center;
+    text-decoration: underline;
 }
 
 #questions {
@@ -314,58 +311,5 @@ input[type="number"] {
     border: none;
 }
 
-#arrow-left {
-  border: solid black;
-  border-width: 0 3px 3px 0;
-  display: inline-block;
-  padding: 10px;
-  transform: rotate(135deg);
-  -webkit-transform: rotate(135deg);
-
-  cursor: pointer;
-}
-
-#arrow-right {
-  border: solid black;
-  border-width: 0 3px 3px 0;
-  display: inline-block;
-  padding: 10px;
-  transform: rotate(-45deg);
-  -webkit-transform: rotate(-45deg);
-  margin-right: 2em;
-
-  cursor: pointer;
-}
-
-#prev-theme {
-    display: flex;
-    align-content: center;
-    height: 100%;
-    place-content: space-between;
-    align-items: center;
-    grid-area: prev;
-}
-
-#current-theme {
-    grid-area: current;
-    display: flex;
-    align-items: center;
-    place-content: center;
-    color: var(--secondary-color);
-}
-
-#next-theme {
-    display: flex;
-    align-content: center;
-    height: 100%;
-    place-content: space-between;
-    align-items: center;
-    grid-area: next;
-}
-
-#prev-theme > p:hover, #current-theme > p:hover, #next-theme> p:hover {
-  text-decoration: underline;
-  cursor: pointer;
-}
 
 </style>

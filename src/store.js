@@ -180,6 +180,39 @@ export default {
             }
 
             return currentQuestions;
+        },
+
+        teamLabels(state) {
+            const teams = state.teams;
+            let labels = [];
+
+            for (let i = 0; i < teams.length; i++) {
+                labels.push(teams[i].label);
+            }
+
+            return labels;
+        },
+
+        teamColors(state) {
+            const teams = state.teams;
+            let colors = [];
+
+            for (let i = 0; i < teams.length; i++) {
+                colors.push(teams[i].color);
+            }
+
+            return colors;
+        },
+
+        teamTotalScores(state) {
+            const teams = state.teams;
+            let totals = [];
+
+            for (let i = 0; i < teams.length; i++) {
+                totals.push(teams[i].score.total);
+            }
+
+            return totals;
         }
     }
 };
