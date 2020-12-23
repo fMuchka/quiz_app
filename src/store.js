@@ -60,19 +60,25 @@ export default {
             const quiz = state.quiz;
             let scoreTemplate = state.scoreTemplate;
             let questions = {};
+            let themes = {};
 
             for (const index in quiz.questions) {
                 questions[index] = 0;
             }
 
+            for (const index in quiz.themes) {
+                themes[index] = 0;
+            }
+
             scoreTemplate["questions"] = questions;
+            scoreTemplate["themes"] = themes;
             scoreTemplate["total"] = 0;
         },
 
         createTeam({ state, commit }, team) {
             const scoreTemplate = state.scoreTemplate;
 
-            team["score"] = Object.assign({}, scoreTemplate);
+            team["score"] = JSON.parse(JSON.stringify(scoreTemplate));
 
             commit("pushTeam", team);
         },
@@ -92,6 +98,20 @@ export default {
 
             commit("setCurrentQuestion", prevQ);
         },
+
+        nextTheme({ state, commit, getters }) {
+            const index = getters.currentThemeIndex;
+            const id = state.quiz.flow[index + 1];
+
+            commit("setCurrentTheme", id);
+        },
+
+        previousTheme({ state, commit, getters }) {
+            const index = getters.currentThemeIndex;
+            const id = state.quiz.flow[index - 1];
+
+            commit("setCurrentTheme", id);
+        }
     },
 
     getters: {
