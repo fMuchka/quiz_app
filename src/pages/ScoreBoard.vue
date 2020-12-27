@@ -75,6 +75,14 @@
       </div>
 
       <flow-arrow
+        v-if="isLastTheme === true"
+          :isForward="true"
+          :nextPage="'finalresults'"
+          >
+      </flow-arrow>
+
+      <flow-arrow
+        v-else
           :isForward="true"
           :nextPage="'themesoverview'"
           >
@@ -144,6 +152,10 @@ export default {
       get(){
         return this.$store.state.currentThemeID;
       }
+    },
+
+    isLastTheme(){
+      return this.$store.getters.isLastTheme;
     },
 
     chartData(){
@@ -273,8 +285,8 @@ export default {
 #questions > div {
     border-bottom: 1px solid black;
     display: flex;
-    align-items: flex-end;
     height: 20%;
+    padding: 10px;
 }
 
 #input-table{

@@ -33,6 +33,11 @@ const routes = [
         name: 'scoreboard',
         component: () => import('./pages/ScoreBoard.vue')
     },
+    {   
+        path: '/finalresults',
+        name: 'finalresults',
+        component: () => import('./pages/FinalResults.vue')
+    },
   ];
 
 const router = new VueRouter({

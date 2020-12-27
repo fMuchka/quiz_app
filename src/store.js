@@ -213,6 +213,14 @@ export default {
             }
 
             return totals;
+        },
+
+        isLastTheme(state) {
+            const currentTheme = state.currentThemeID;
+            const flow = state.quiz.flow;
+            const currentIndex = flow.indexOf(currentTheme);
+
+            return (currentIndex === flow.length - 1);
         }
     }
 };
