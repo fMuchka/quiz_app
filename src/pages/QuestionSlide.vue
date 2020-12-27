@@ -59,14 +59,14 @@ export default {
 
     computed:{
         themeLabel(){
-            return this.$store.getters.currentTheme.title;
+            return this.$store.getters.currentTheme.text;
         },
         questionIdentity(){
             return `Otázka č.${this.$store.getters.currentQuestionIndex+1}`;
         },
         pointsInfo(){
-            const points = this.$store.getters.currentQuestion.points;
-            const step = this.$store.getters.currentQuestion.step; 
+            const points = this.$store.getters.currentQuestion.points.max;
+            const step = this.$store.getters.currentQuestion.points.increment; 
 
             return {points: points, step: step};
         },
@@ -108,10 +108,10 @@ export default {
             return [firstPart, secondPart].join(', ');
         },
         progressInfo(){
-            return this.$store.getters.currentQuestionIndex/(this.$store.getters.currentTheme.question.length-1)*100 + "%";
+            return this.$store.getters.currentQuestionIndex/(this.$store.getters.currentTheme.questions.length-1)*100 + "%";
         },
         progressBar(){
-            return `width: ${this.$store.getters.currentQuestionIndex/(this.$store.getters.currentTheme.question.length-1)*100}%`;
+            return `width: ${this.$store.getters.currentQuestionIndex/(this.$store.getters.currentTheme.questions.length-1)*100}%`;
         },
         questionText(){
             return this.$store.getters.currentQuestion.text;
@@ -124,28 +124,28 @@ export default {
 </script>
 
 <style scoped>
-div#wrapper {
+#wrapper {
     display: grid;
     grid-template-rows: 10% 1% 89%;
     height: 100%;
 }
 
-div#split-line {
+#split-line {
     width: 100%;
     border-bottom: 5px solid #F77F00;
     height: 1px;
 }
 
-div#bottom-area {
+#bottom-area {
     font-size: 40px;
     padding: 2%;
 }
 
-div#question-text {
+#question-text {
     text-align: center;
 }
 
-div#top-area {
+#top-area {
     display: grid;
     grid-template-areas:
         ". q-identity ."
@@ -156,19 +156,19 @@ div#top-area {
     align-items: center;
 }
 
-div#theme-label {
+#theme-label {
     grid-area: theme-label;
     font-size: 32px;
     }
 
-div#q-identity {
+#q-identity {
     grid-area: q-identity;
     font-size: 32px;
     text-decoration: underline;
     align-self: end;
 }
 
-div#points-info {
+#points-info {
     grid-area: points-info;
     font-size: 28px;
     align-self: start;

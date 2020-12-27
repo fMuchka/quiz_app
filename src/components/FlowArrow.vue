@@ -42,7 +42,7 @@ export default {
             else{
 
                 const questionIndex = this.$store.getters.currentQuestionIndex;
-                const nOfQuestions = this.$store.getters.currentTheme.question.length;
+                const nOfQuestions = this.$store.getters.currentTheme.questions.length;
 
                 if (this.isForward) {
                     if (questionIndex === (nOfQuestions - 1)) {
@@ -51,7 +51,7 @@ export default {
                         });
                     }
                     else{
-                        this.$store.commit('nextQuestion');
+                        this.$store.dispatch('nextQuestion');
                     }
                     
                 }
@@ -62,7 +62,7 @@ export default {
                         });
                     }
                     else{
-                        this.$store.commit('previousQuestion');
+                        this.$store.dispatch('previousQuestion');
                     }       
                 }
             }   

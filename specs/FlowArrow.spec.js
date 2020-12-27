@@ -12,8 +12,21 @@ describe("FlowArrow Component:", () => {
     let attrs;
 
     beforeEach(() => {
-        mainStore.state.currentIndexes = { question: 0, theme: 0 };
-        mainStore.state.quiz = { theme: [{ question: [0, 1, 2] }] };
+        mainStore.state.currentThemeID = "1";
+        mainStore.state.currentQuestionID = "q2";
+        mainStore.state.quiz = {
+            themes: {
+                "0": { text: "1", questions: ["q1", "q2", "q3"] }, 
+                "1": { text: "2", questions: ["q1", "q2", "q3"] },
+                "2": { text: "3", questions: ["q1", "q2", "q3"] }
+            },
+            flow: ["0", "1", "2"],
+            questions: {
+                "q1": {},
+                "q2": {},
+                "q3": {}
+            }
+        };
         store = new Vuex.Store(mainStore);
     });
 
@@ -65,12 +78,12 @@ describe("FlowArrow Component:", () => {
 
             const moveSpy = jest.spyOn(wrapper.vm, "move");
             const arrowEl = wrapper.find("#background");
-            const currentQuestionIndex = store.state.currentIndexes.question;
+            const currentQuestionIndex = store.getters.currentQuestionIndex;
 
             arrowEl.trigger("click");
             
             expect(moveSpy).toHaveBeenCalled();
-            expect(store.state.currentIndexes.question).toBe(currentQuestionIndex + 1);
+            expect(store.getters.currentQuestionIndex).toBe(currentQuestionIndex + 1);
         });
 
         it("moves to themes answers as expected", () => {
@@ -99,7 +112,7 @@ describe("FlowArrow Component:", () => {
             const moveSpy = jest.spyOn(wrapper.vm, "move");
             const arrowEl = wrapper.find("#background");
 
-            const nOfQuestions = store.getters.currentTheme.question.length;
+            const nOfQuestions = store.getters.currentThemeQuestions.length;
 
             for (let i = 0; i < nOfQuestions; i++) {
                 arrowEl.trigger("click");
@@ -114,8 +127,6 @@ describe("FlowArrow Component:", () => {
         it("moves to previous question as expected", () => {
             attrs = { isForward: false };
 
-            store.state.currentIndexes.question = 2;
-
             const wrapper = mount(FlowArrow, {
                 localVue,
                 store,
@@ -127,12 +138,12 @@ describe("FlowArrow Component:", () => {
 
             const moveSpy = jest.spyOn(wrapper.vm, "move");
             const arrowEl = wrapper.find("#background");
-            const currentQuestionIndex = store.state.currentIndexes.question;
+            const currentQuestionIndex = store.getters.currentQuestionIndex;
 
             arrowEl.trigger("click");
             
             expect(moveSpy).toHaveBeenCalled();
-            expect(store.state.currentIndexes.question).toBe(currentQuestionIndex-1);
+            expect(store.getters.currentQuestionIndex).toBe(currentQuestionIndex-1);
         });
 
         it("moves to themes overview as expected", () => {
@@ -145,7 +156,6 @@ describe("FlowArrow Component:", () => {
                 }
             };
             attrs = { isForward: false };
-            store.state.currentIndexes.question = 2;
 
             const wrapper = mount(FlowArrow, {
                 localVue,
@@ -162,7 +172,7 @@ describe("FlowArrow Component:", () => {
             const moveSpy = jest.spyOn(wrapper.vm, "move");
             const arrowEl = wrapper.find("#background");
 
-            const nOfQuestions = store.getters.currentTheme.question.length;
+            const nOfQuestions = store.getters.currentThemeQuestions.length;
 
             for (let i = 0; i < nOfQuestions; i++) {
                 arrowEl.trigger("click");

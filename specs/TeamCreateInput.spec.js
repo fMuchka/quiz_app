@@ -78,7 +78,7 @@ describe("TeamCreateInput Component:", () => {
       button.element.dispatchEvent(new Event('click'))
       expect(confirmTeamSpy).toHaveBeenCalled();
       expect(store.state.teams.length).toBe(1);
-      expect(store.state.teams[0]).toStrictEqual({ label: testLabel, color: wrapper.vm.color.id })
+      expect(store.state.teams[0]).toStrictEqual({ label: testLabel, color: wrapper.vm.color.id , score: {}})
     });
   });
 

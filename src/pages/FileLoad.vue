@@ -40,6 +40,7 @@ export default {
         const quiz = JSON.parse(e.target.result);
         // save the quiz data into app store
         this.$store.commit("setQuiz", quiz);
+        this.$store.dispatch("setupScoreTemplate");
       };
       reader.readAsText(event.target.files[0]);
     },

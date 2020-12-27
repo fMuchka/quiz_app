@@ -4,7 +4,7 @@
             :key="index"
             @click="openFirstQuestion(index)"
             >
-            {{ item.title }}  
+            {{ item.text }}  
         </button>
     </div>
 </template>
@@ -13,15 +13,16 @@
 export default {
     data(){
         return{
-            themes: this.$store.getters.quiz.theme
+            themes: this.$store.getters.quiz.themes
         }
     },
 
     methods:{
         openFirstQuestion(index){
             // go to first question of selected theme
-            this.$store.commit("setCurrentQuestionIndex", 0);
-            this.$store.commit("setCurrentThemeIndex", index);
+            this.$store.commit("setCurrentTheme", index);
+            this.$store.commit("firstQuestion");
+            
             this.$router.push({   
                         name: 'questionslide'  
             });

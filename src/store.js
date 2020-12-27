@@ -11,10 +11,10 @@ export default {
             { id: 'brown', label: 'Hnědý', used: false },
         ],
         isMenuHidden: true,
-        currentIndexes: {
-            theme: 0,
-            question: 0
-        }
+        currentQuestionID: null,
+        currentThemeID: null,
+
+        scoreTemplate: {}
     },
 
     mutations: {
@@ -42,20 +42,76 @@ export default {
             state.isMenuHidden = false;
         },
 
-        setCurrentQuestionIndex(state, index) {
-            state.currentIndexes.question = index;
+        setCurrentQuestion(state, q) {
+            state.currentQuestionID = q;
         },
 
-        setCurrentThemeIndex(state, index) {
-            state.currentIndexes.theme = index;
+        firstQuestion(state) {
+            state.currentQuestionID = state.quiz.themes[state.currentThemeID].questions[0];  
         },
 
-        previousQuestion(state) {
-            state.currentIndexes.question--;
+        setCurrentTheme(state, t) {
+            state.currentThemeID = t;
+        }
+    },
+
+    actions: {
+        setupScoreTemplate({state}) {
+            const quiz = state.quiz;
+            let scoreTemplate = state.scoreTemplate;
+            let questions = {};
+            let themes = {};
+
+            for (const index in quiz.questions) {
+                questions[index] = 0;
+            }
+
+            for (const index in quiz.themes) {
+                themes[index] = 0;
+            }
+
+            scoreTemplate["questions"] = questions;
+            scoreTemplate["themes"] = themes;
+            scoreTemplate["total"] = 0;
         },
-        nextQuestion(state) {
-            state.currentIndexes.question++;
+
+        createTeam({ state, commit }, team) {
+            const scoreTemplate = state.scoreTemplate;
+
+            team["score"] = JSON.parse(JSON.stringify(scoreTemplate));
+
+            commit("pushTeam", team);
         },
+
+        nextQuestion({ state, commit, getters }) {
+            const theme = state.quiz.themes[state.currentThemeID];
+            const currentQIndex = getters.currentQuestionIndex;
+            const nextQ = theme.questions[currentQIndex + 1];
+
+            commit("setCurrentQuestion", nextQ);
+        },
+
+        previousQuestion({ state, commit, getters }) {
+            const theme = state.quiz.themes[state.currentThemeID];
+            const currentQIndex = getters.currentQuestionIndex;
+            const prevQ = theme.questions[currentQIndex - 1];
+
+            commit("setCurrentQuestion", prevQ);
+        },
+
+        nextTheme({ state, commit, getters }) {
+            const index = getters.currentThemeIndex;
+            const id = state.quiz.flow[index + 1];
+
+            commit("setCurrentTheme", id);
+        },
+
+        previousTheme({ state, commit, getters }) {
+            const index = getters.currentThemeIndex;
+            const id = state.quiz.flow[index - 1];
+
+            commit("setCurrentTheme", id);
+        }
     },
 
     getters: {
@@ -94,17 +150,69 @@ export default {
         },
 
         currentThemeIndex(state) {
-            return state.currentIndexes.theme;
+            const currentTheme = state.currentThemeID;
+            const currentIndex = state.quiz.flow.indexOf(currentTheme);
+
+            return currentIndex;
         },
         currentQuestionIndex(state) {
-            return state.currentIndexes.question;
+            const currentTheme = state.currentThemeID;
+            const currentQuestion = state.currentQuestionID;
+            const currentIndex = state.quiz.themes[currentTheme].questions.indexOf(currentQuestion);
+
+            return currentIndex;
         },
         currentTheme(state) {
-            return state.quiz.theme[state.currentIndexes.theme]
+            return state.quiz.themes[state.currentThemeID];
         },
 
         currentQuestion(state) {
-            return state.quiz.theme[state.currentIndexes.theme].question[state.currentIndexes.question];
+            return state.quiz.questions[state.currentQuestionID];
+        },
+
+        currentThemeQuestions(state) {
+            const currentTheme = state.quiz.themes[state.currentThemeID];
+            let currentQuestions = [];
+
+            for (let i = 0; i < currentTheme.questions.length; i++) {
+                const q = currentTheme.questions[i];
+                currentQuestions.push(state.quiz.questions[q]);
+            }
+
+            return currentQuestions;
+        },
+
+        teamLabels(state) {
+            const teams = state.teams;
+            let labels = [];
+
+            for (let i = 0; i < teams.length; i++) {
+                labels.push(teams[i].label);
+            }
+
+            return labels;
+        },
+
+        teamColors(state) {
+            const teams = state.teams;
+            let colors = [];
+
+            for (let i = 0; i < teams.length; i++) {
+                colors.push(teams[i].color);
+            }
+
+            return colors;
+        },
+
+        teamTotalScores(state) {
+            const teams = state.teams;
+            let totals = [];
+
+            for (let i = 0; i < teams.length; i++) {
+                totals.push(teams[i].score.total);
+            }
+
+            return totals;
         }
     }
 };

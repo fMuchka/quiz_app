@@ -1,17 +1,17 @@
 import Vuex from "vuex";
 import { mount, createLocalVue } from "@vue/test-utils";
 
-import QuestionSlide from "../src/pages/QuestionSlide.vue";
+import ScoreBoard from "../src/pages/ScoreBoard.vue";
 import mainStore from "../src/store.js";
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
-describe("QuestionSlide Page:", () => {
+describe("ScoreBoard page:", () => {
     let store;
 
-    beforeEach(() => {
-        mainStore.state.quiz = {
+     beforeEach(() => {
+         mainStore.state.quiz = {
             "flow": [
                 "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10"
             ],
@@ -125,50 +125,69 @@ describe("QuestionSlide Page:", () => {
                 "m2": "./media/sound01.mp3",
                 "m3": "./media/video01.mp4"
             }
+         };
+
+         mainStore.state.teams = [{ "label": "Team Secret", "color": "red", "score": { "questions": { "q1": 1, "q2": 1, "q3": 1, "q4": 1, "q5": 0, "q6": 0, "q7": 0.5, "q8": 1, "q9": 0, "q10": 1 }, "themes": { "t1": 0, "t2": 0, "t3": 0, "t4": 0, "t5": 0, "t6": 0, "t7": 0, "t8": 0, "t9": 0, "t10": 0 }, "total": 6.5 } }, { "label": "Team Liquid", "color": "blue", "score": { "questions": { "q1": 1, "q2": 0, "q3": 1, "q4": 0, "q5": 1, "q6": 0, "q7": 0.5, "q8": 0, "q9": 1, "q10": 0 }, "themes": { "t1": 0, "t2": 0, "t3": 0, "t4": 0, "t5": 0, "t6": 0, "t7": 0, "t8": 0, "t9": 0, "t10": 0 }, "total": 4.5 } }, { "label": "OG", "color": "green", "score": { "questions": { "q1": 0, "q2": 1, "q3": 0, "q4": 1, "q5": 1, "q6": 0, "q7": 0.5, "q8": 0, "q9": 1, "q10": 0 }, "themes": { "t1": 0, "t2": 0, "t3": 0, "t4": 0, "t5": 0, "t6": 0, "t7": 0, "t8": 0, "t9": 0, "t10": 0 }, "total": 4.5 } }, { "label": "Natus Vincere", "color": "yellow", "score": { "questions": { "q1": 0, "q2": 1, "q3": 1, "q4": 0, "q5": 0, "q6": 0.5, "q7": 0.5, "q8": 1, "q9": 1, "q10": 1 }, "themes": { "t1": 0, "t2": 0, "t3": 0, "t4": 0, "t5": 0, "t6": 0, "t7": 0, "t8": 0, "t9": 0, "t10": 0 }, "total": 6 } }, { "label": "Team Nigma", "color": "purple", "score": { "questions": { "q1": 1, "q2": 0, "q3": 1, "q4": 1, "q5": 0, "q6": 0, "q7": 0.5, "q8": 0, "q9": 1, "q10": 1 }, "themes": { "t1": 0, "t2": 0, "t3": 0, "t4": 0, "t5": 0, "t6": 0, "t7": 0, "t8": 0, "t9": 0, "t10": 0 }, "total": 5.5 } }, { "label": "Gambit", "color": "brown", "score": { "questions": { "q1": 0, "q2": 1, "q3": 0, "q4": 1, "q5": 1, "q6": 0, "q7": 0.5, "q8": 0, "q9": 1, "q10": 1 }, "themes": { "t1": 0, "t2": 0, "t3": 0, "t4": 0, "t5": 0, "t6": 0, "t7": 0, "t8": 0, "t9": 0, "t10": 0 }, "total": 5.5 } }];
+         
+         mainStore.state.currentThemeID = "t1";
+
+         store = new Vuex.Store(mainStore);
+     });
+    
+    
+    it("Computed properties match store", () => {
+        const wrapper = mount(ScoreBoard, {
+            localVue,
+            store,
+            stubs: ["MiniChart"]
+        });        
+
+        const wrapper_teams = wrapper.vm.teams;
+        const store_teams = wrapper.vm.$store.state.teams;
+
+        expect(wrapper_teams).toBe(store_teams);
+
+        const wrapper_themes = wrapper.vm.themes;
+        const store_themes = wrapper.vm.$store.state.quiz.themes;
+
+        expect(wrapper_themes).toBe(store_themes);
+
+        const wrapper_questions = wrapper.vm.questions;
+        const store_questions = wrapper.vm.$store.state.quiz.questions;
+
+        expect(wrapper_questions).toBe(store_questions);
+
+        const wrapper_currentTheme = wrapper.vm.currentTheme;
+        const store_currentTheme = wrapper.vm.$store.getters.currentTheme;
+
+        expect(wrapper_currentTheme).toBe(store_currentTheme);
+
+        const wrapper_currentThemeID = wrapper.vm.currentThemeID;
+        const store_currentThemeID = wrapper.vm.$store.state.currentThemeID;
+
+        expect(wrapper_currentThemeID).toBe(store_currentThemeID);
+
+        wrapper.vm.currentThemeID = "t2";
+
+        expect(wrapper_currentThemeID).toBe(store_currentThemeID);
+
+        const wrapper_chartData = wrapper.vm.chartData;
+        const store_teamData = wrapper.vm.$store.getters.teamTotalScores;
+        const store_teamColors = wrapper.vm.$store.getters.teamColors;
+        const store_teamLabels = wrapper.vm.$store.getters.teamLabels;
+
+        const expectedData = {
+            datasets: [
+                {
+                    data: store_teamData,
+                    label: "",
+                    backgroundColor: store_teamColors
+                },
+            ],
+
+            labels: store_teamLabels
         };
 
-        mainStore.state.currentThemeID = "t1";
-        mainStore.state.currentQuestionID = "q1";
-
-        store = new Vuex.Store(mainStore);
+        expect(expectedData).toStrictEqual(wrapper_chartData);
     });
-    
-    describe("has proper store values", () => {
-        it("question text", async () => {
-            const wrapper = mount(QuestionSlide, {
-                localVue,
-                store,
-            });
-            
-            expect(wrapper.vm.questionText).toBe(store.getters.currentQuestion.text);
-        });
-
-        it("theme label", async () => {
-            const wrapper = mount(QuestionSlide, {
-                localVue,
-                store,
-            });
-   
-            expect(wrapper.vm.themeLabel).toBe(store.getters.currentTheme.text);
-        });
-
-        it("question identity", async () => {
-            const wrapper = mount(QuestionSlide, {
-                localVue,
-                store,
-            });
-   
-            expect(wrapper.vm.questionIdentity.includes(1)).toBe(true);
-        });
-
-        it("points info", async () => {
-            const wrapper = mount(QuestionSlide, {
-                localVue,
-                store,
-            });
-   
-            expect(wrapper.vm.pointsInfo.points).toBe(store.getters.currentQuestion.points.max);
-            expect(wrapper.vm.pointsInfo.step).toBe(store.getters.currentQuestion.points.increment);
-        });
-    })
-})
+});

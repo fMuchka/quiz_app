@@ -78,14 +78,15 @@ export default {
         color: this.color.id,
       };
 
-      this.$store.commit("pushTeam", team);
+      //this.$store.commit("pushTeam", team);
+      this.$store.dispatch("createTeam", team);
       this.isConfirmed = true;
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
 .input-wrapper {
   display: grid;
   grid-template-columns: 200px 250px 60px 60px;
