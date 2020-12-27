@@ -155,6 +155,15 @@ export default {
 
             return currentIndex;
         },
+
+        isLastTheme(state) {
+            const currentTheme = state.currentThemeID;
+            const flow = state.quiz.flow;
+            const currentIndex = flow.indexOf(currentTheme);
+
+            return (currentIndex === flow.length - 1);
+        },
+         
         currentQuestionIndex(state) {
             const currentTheme = state.currentThemeID;
             const currentQuestion = state.currentQuestionID;
@@ -215,12 +224,30 @@ export default {
             return totals;
         },
 
-        isLastTheme(state) {
-            const currentTheme = state.currentThemeID;
-            const flow = state.quiz.flow;
-            const currentIndex = flow.indexOf(currentTheme);
+        teamsSortedByScore(state) {
+            const teams = state.teams;
+            let sorted = [];
 
-            return (currentIndex === flow.length - 1);
+            for (const key in teams) {
+                sorted.push(teams[key]);
+            }
+
+            sorted.sort((a, b) => {
+                return  b.score.total - a.score.total;
+            });
+
+            return sorted;
+        },
+
+        quizPointsMaximum(state) {
+            const questions = state.quiz.questions;
+            let max = 0;
+            
+           for (const key in questions) {
+               max += questions[key].points.max;
+           }
+
+            return max;
         }
     }
 };
