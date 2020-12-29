@@ -36,7 +36,7 @@ export default {
                         backgroundColor: teamColor,
                         fill: false,
                         borderColor: teamColor,
-                        steppedLine: true
+                        //steppedLine: true
                     }
                 )
             }
@@ -105,6 +105,21 @@ export default {
                 },
                 responsive: true,
                 maintainAspectRatio: false,
+
+                tooltips: {
+                    mode: "index",
+                    itemSort: function(a, b){
+                        
+                        return b.value - a.value;
+                    },
+
+                    callbacks: {
+                        title: function(labelObj) {
+                            return  "Otázka " + labelObj[0].index;
+                        }
+                    }
+
+                }
             };
             
         return options;

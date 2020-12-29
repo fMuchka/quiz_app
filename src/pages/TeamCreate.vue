@@ -79,6 +79,7 @@ export default {
   display: flex;
   align-items: center;
   flex-direction: column;
+  margin: 5%;
 }
 
 label[for="addButton"] {
