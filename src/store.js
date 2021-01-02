@@ -248,6 +248,17 @@ export default {
            }
 
             return max;
+        },
+
+        themesQWithDummy(state) {
+            const themes = state.quiz.themes;
+            let withDummy = JSON.parse(JSON.stringify(themes));
+
+            for (const theme in withDummy) {
+                withDummy[theme].questions.unshift("dummy");
+            }
+
+            return withDummy;
         }
     }
 };

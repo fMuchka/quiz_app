@@ -2,11 +2,21 @@
 import { Line, mixins } from 'vue-chartjs'
 
 export default {
-    extends: Line,
     name: "AllQuestionsChart",
+    extends: Line,
     mixins: [mixins.reactiveProp],
+    props: {
+        chartData: {
+            type: Object,
+            default: null
+        },
+        options: {
+            type: Object,
+            default: null
+        }
+    },
     computed:{
-        chartData(){
+        data(){
             let data = {
                 datasets: [
     
@@ -127,7 +137,7 @@ export default {
     },
 
     mounted () {
-        this.renderChart(this.chartData, this.chartOptions)
+        this.renderChart(this.data, this.chartOptions)
     }
 }
 </script>

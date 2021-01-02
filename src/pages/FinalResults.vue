@@ -40,16 +40,6 @@
 
         </div>
 
-        <div 
-            id="slides-container"
-            v-if="currentDisplay === 'allQuestions'"    
-        > 
-            <all-questions-chart 
-                id="all-questions-chart"
-            />
-        </div>
-        
-
         <div
             id="buttons-wrapper"
         >
@@ -69,24 +59,44 @@
                 </label>
             </div>
         </div>
+
+        <div 
+            id="slides-container"
+            v-if="currentDisplay === 'chartView'"    
+        > 
+            <all-questions-chart 
+                id="all-questions-chart"
+            />
+        </div>
+
+        <div 
+            id="slides-container"
+            v-if="currentDisplay === 'tableView'"    
+        > 
+            <score-summary-table
+                id="score-summary-table"
+            />
+        </div>
     </div>
 </template>
 
 <script>
 import AllQuestionsChart from "../components/AllQuestionsChart.vue"
+import ScoreSummaryTable from "../components/ScoreSummaryTable.vue"
 
 
 export default {
     name: "FinalResults",
     components:{
-        AllQuestionsChart
+        AllQuestionsChart,
+        ScoreSummaryTable
     },
 
     data(){
         return{
             sortedTeams: this.$store.getters.teamsSortedByScore,
-            currentDisplay: 'allQuestions',
-            possibleDisplays: [{ id: "allQuestions", label: "Skóre podle otázek"}, { id: "allThemes", label: "Skóre podle témat"}]
+            currentDisplay: 'chartView',
+            possibleDisplays: [{ id: "chartView", label: "Grafický přehled"}, { id: "tableView", label: "Tabulkový přehled"}]
         }
     },
 
@@ -114,7 +124,7 @@ export default {
 
                 this.currentDisplay = this.possibleDisplays[newIndex].id;
 
-                this.startSlideShow();
+                //this.startSlideShow();
             }, changeTime);
         }
     }
@@ -175,6 +185,17 @@ export default {
     width: 100%;
 }
 
+#score-summary-table {
+    display: grid;
+    grid-template-areas:
+        ". teams"
+        "table table";
+    grid-template-rows: max-content;
+    grid-template-columns: 20% 80%;
+    width: 100%;
+}
+
+
 .placement::before {
     content: " ";
     width: 20px;
@@ -200,12 +221,9 @@ export default {
 
 #buttons-wrapper {
     display: flex;
-    margin: auto;
+    margin: 0 auto 2%;
     width: 80%;
     justify-content: space-evenly;
-    position: absolute;
-    bottom: 5%;
-    left: 10%;
 }
 
 </style>
