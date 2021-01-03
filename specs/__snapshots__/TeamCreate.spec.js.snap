@@ -17,6 +17,16 @@ exports[`TeamCreate Page: matches snapshot 1`] = `
     +
   
   </button>
-   
+    
+  <div
+    class="right"
+    id="background"
+    isforward="true"
+    nextpage="themesoverview"
+  >
+    <div
+      id="arrow"
+    />
+  </div>
 </div>
 `;

@@ -15,6 +15,17 @@ exports[`FileLoad Page: matches snapshot 1`] = `
     type="file"
   />
    
+  <div
+    class="right"
+    id="background"
+    isforward="true"
+    nextpage="teamcreate"
+  >
+    <div
+      id="arrow"
+    />
+  </div>
+   
   <label
     for="quizLoadInput"
   >
