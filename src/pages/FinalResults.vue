@@ -47,14 +47,14 @@
                 v-for="(item, index) in possibleDisplays"
                 :key="index"
             >
-                <input 
-                    type="radio"
-                    :id="item.id"
-                    name="currentDisplay" 
-                    v-model="currentDisplay" 
-                    :value="item.id"
-                >
-                <label for="allQuestions">
+                <label :for="item.id">
+                    <input 
+                        type="radio"
+                        :id="item.id"
+                        name="currentDisplay" 
+                        v-model="currentDisplay" 
+                        :value="item.id"
+                    >
                     {{item.label}}
                 </label>
             </div>
@@ -145,6 +145,9 @@ export default {
         AllQuestionsChartOptions(){
             const store = this.$store;
             const options = {
+                animation:{
+                    duration: 0
+                },
                 legend: {
                     display: true
                 },
@@ -230,11 +233,15 @@ export default {
 
     methods:{
         startSlideShow(){
-            const changeTime = 10000; //miliseconds
-            const currentIndex = this.possibleDisplays.map(e => e.id).indexOf(this.currentDisplay);
+            const baseChangeTime = 10000; //miliseconds
+            const changeTimeLimit = baseChangeTime*6;
+            
 
-            setTimeout(() => {
+            let changeTime = baseChangeTime;
+
+            setInterval(() => {
                 let newIndex;
+                const currentIndex = this.possibleDisplays.map(e => e.id).indexOf(this.currentDisplay);
 
                 if (currentIndex === this.possibleDisplays.length - 1) {
                     newIndex = 0;
@@ -244,7 +251,13 @@ export default {
 
                 this.currentDisplay = this.possibleDisplays[newIndex].id;
 
-                //this.startSlideShow();
+
+                if(changeTime >= changeTimeLimit){
+                    changeTime = changeTimeLimit;
+                }
+
+                changeTime += Math.log(changeTimeLimit) / Math.log(changeTime) * 1000 + baseChangeTime;
+
             }, changeTime);
         }
     }
