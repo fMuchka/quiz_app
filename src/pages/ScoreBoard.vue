@@ -75,6 +75,14 @@
       </div>
 
       <flow-arrow
+        v-if="isLastTheme === true"
+          :isForward="true"
+          :nextPage="'finalresults'"
+          >
+      </flow-arrow>
+
+      <flow-arrow
+        v-else
           :isForward="true"
           :nextPage="'themesoverview'"
           >
@@ -146,6 +154,10 @@ export default {
       }
     },
 
+    isLastTheme(){
+      return this.$store.getters.isLastTheme;
+    },
+
     chartData(){
       const data = {
         datasets: [
@@ -171,11 +183,25 @@ export default {
           const score = this.teams[i].score; 
           let sum = 0;
 
+          let scoreMap = {};
+
           for (const q in score.questions) {
             sum += score.questions[q];
+
+            scoreMap[q] = score.questions[q];
+          }
+
+          const currentTheme = this.currentTheme; // user has access only to the current visible theme
+          let themeSum = 0;
+
+          for (let j = 0; j < currentTheme.questions.length; j++) {
+            const themeQ = currentTheme.questions[j];
+            
+            themeSum += scoreMap[themeQ];
           }
 
           score.total = sum;
+          score.themes[this.currentThemeID] = themeSum;
         }
       }
     } 
@@ -273,8 +299,8 @@ export default {
 #questions > div {
     border-bottom: 1px solid black;
     display: flex;
-    align-items: flex-end;
     height: 20%;
+    padding: 10px;
 }
 
 #input-table{

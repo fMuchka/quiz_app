@@ -84,6 +84,7 @@ label[for="menu-icon"] > div{
 label[for="menu-icon"]{
   position: absolute;
   z-index: 5;
+  margin: 15px;
 }
 
 #menu-icon:hover ~ label[for="menu-icon"] > div{

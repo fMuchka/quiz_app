@@ -11,15 +11,23 @@
       :index="index"
       @remove="removeTeamInput(index, team.color.id)"
     />
+
+    <flow-arrow
+        :isForward="true"
+        :nextPage="'themesoverview'"
+        >
+    </flow-arrow>
   </div>
 </template>
 
 <script>
 import TeamCreateInput from "../components/TeamCreateInput.vue";
+import FlowArrow from "../components/FlowArrow.vue";
 
 export default {
   components: {
     TeamCreateInput,
+    FlowArrow
   },
 
   data() {
@@ -71,6 +79,7 @@ export default {
   display: flex;
   align-items: center;
   flex-direction: column;
+  margin: 5%;
 }
 
 label[for="addButton"] {

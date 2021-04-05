@@ -14,6 +14,13 @@
       v-on:change="loadFile"
     />
 
+
+    <flow-arrow
+        :isForward="true"
+        :nextPage="'teamcreate'"
+        >
+    </flow-arrow>
+
     <label for="quizLoadInput"> Otevři kvíz </label>
     <div>
       <b>Loaded data:</b>
@@ -23,7 +30,13 @@
 </template>
 
 <script>
+import FlowArrow from "../components/FlowArrow.vue"
+
 export default {
+  components:{
+    FlowArrow
+  },
+
   computed: {
     loadedQuizData: {
       get() {

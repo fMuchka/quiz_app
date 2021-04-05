@@ -11,6 +11,19 @@
 
     body {
         background-color: var(--main-color);
+        margin: 0;
+    }
+
+    #app{
+        position: absolute;
+        height: 100%;
+        width: 100%;
+    }
+
+    #app > #logo{
+        position: fixed;
+        height: 70px;
+        right: 0;
     }
 </style>
 
@@ -23,6 +36,8 @@
 <body>
     <div id="app">
         <navigation-menu></navigation-menu>
+
+        <img id="logo" src="/src/assets/sviniPivemNezarmoutis_logo.png" alt="nope" />
         <!-- route outlet -->
         <!-- component matched by the route will render here -->
         <router-view></router-view>
