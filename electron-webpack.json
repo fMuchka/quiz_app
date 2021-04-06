@@ -1,0 +1,6 @@
+{
+  "renderer": {
+    "sourceDirectory": "./dist/",
+    "template": "./dist/index.html"
+  }
+}

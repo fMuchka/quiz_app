@@ -2,7 +2,7 @@
   <div>
     <img
       id="logo"
-      src="/src/assets/sviniPivemNezarmoutis_logo.png"
+      src="assets/sviniPivemNezarmoutis_logo.png"
       alt="nope"
     />
 

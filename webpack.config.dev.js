@@ -9,10 +9,11 @@ module.exports = {
     watchOptions: {
       poll: true,
     },
+    writeToDisk: true
   },
   devtool: "source-map",
   mode: "development",
-  entry: [__dirname + "/src/main.js"],
+  entry: [__dirname + "/src/vue.main.js"],
   output: {
     path: __dirname + "/dev",
     filename: "bundle.js",
@@ -49,7 +50,7 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         { from: "./src/index.html", to: "index.html" },
-        { from: "./src/assets/**", to: "/assets/" },
+        { from: "./src/assets/**", to: "./assets/[name].[ext]" },
       ],
     }),
     new MiniCssExtractPlugin(),
