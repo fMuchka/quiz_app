@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 module.exports = {
   mode: 'production',
   entry: [
-    __dirname + '/src/main.js'
+    __dirname + '/src/vue.main.js'
   ],
   output: {
     path: __dirname + '/dist',
@@ -38,7 +38,7 @@ module.exports = {
     new CopyPlugin({
         patterns: [
             { from: './src/index.html', to: 'index.html' },
-            { from: './src/assets/**', to: '/assets/' }
+            { from: './src/assets/**', to: './assets/[name].[ext]' }
         ]
     }),
     new MiniCssExtractPlugin()
