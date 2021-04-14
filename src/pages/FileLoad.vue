@@ -32,6 +32,43 @@
 <script>
 import FlowArrow from "../components/FlowArrow.vue"
 
+const fileHandler = {
+  sysProps: {
+    "fs" : null,
+    "path" : null
+  },
+  props : {
+    "quizFilePath" : null,
+    "quizFileDir" : null
+  }, 
+  methods : {
+    "init": () => {
+      fileHandler.sysProps.fs = window.require("fs");
+      fileHandler.sysProps.path = window.require("path");
+    },
+    "loadFileFromSystem": (filePath) => {
+          const { path, fs } = fileHandler.sysProps;
+          const { quizFileDir } = fileHandler.props;
+          const fullPath = path.join(quizFileDir, filePath);
+          let canBeAccessed = true;
+          
+          try { 
+            fs.accessSync(fullPath, fs.constants.R_OK);
+          } catch (error) {
+            canBeAccessed = false;
+          }
+          
+
+          return canBeAccessed ? fullPath : false;
+      },
+    "getFileDir": (filePath) => {
+      const { path } = fileHandler.sysProps;
+    
+      return path.dirname(filePath);
+    }
+  }
+}
+
 export default {
   components:{
     FlowArrow
@@ -48,9 +85,37 @@ export default {
   methods: {
     loadFile(event) {
       const reader = new FileReader();
+
+      // A) electron used, B) we can get file-path of quiz File
+      if (event.target.files[0].path) {
+        fileHandler.methods.init();
+
+        const filePath = event.target.files[0].path;
+        fileHandler.props.quizFilePath = filePath;
+        fileHandler.props.quizFileDir = fileHandler.methods.getFileDir(filePath);
+      }
+
       // load file
       reader.onload = (e) => {
         const quiz = JSON.parse(e.target.result);
+
+        //  we have file path of quiz, so we can read relative paths of media files
+        //  we can now simply enforce our rule "keep media files bundled with quiz"
+        if (fileHandler.props.quizFilePath !== null) {
+          for (const media in quiz.mediaFiles) {
+            const absPath = fileHandler.methods.loadFileFromSystem(quiz.mediaFiles[media]);
+
+            console.log(absPath);
+            if (absPath === false) {
+              // file cannot be accessed
+              quiz.mediaFiles[media] = "ERROR";
+            }
+            else{
+              quiz.mediaFiles[media] = absPath;
+            }
+          }
+        }
+
         // save the quiz data into app store
         this.$store.commit("setQuiz", quiz);
         this.$store.dispatch("setupScoreTemplate");

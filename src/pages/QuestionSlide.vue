@@ -117,7 +117,8 @@ export default {
             return this.$store.getters.currentQuestion.text;
         },
         mediaPath(){
-            return this.$store.getters.currentQuestion.media;
+            const pointer = this.$store.getters.currentQuestion.media;
+            return this.$store.getters.quiz.mediaFiles[pointer];
         }
     }
 }
