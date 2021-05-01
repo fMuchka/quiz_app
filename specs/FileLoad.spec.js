@@ -16,15 +16,6 @@ describe("FileLoad Page:", () => {
     store = new Vuex.Store(mainStore);
   });
 
-  it("matches snapshot", () => {
-    const wrapper = mount(FileLoad, {
-      localVue,
-      store,
-    });
-
-    expect(wrapper.element).toMatchSnapshot();
-  });
-
   it("has loadFile()", () => {
     expect(typeof FileLoad.methods.loadFile).toBe("function");
   });
