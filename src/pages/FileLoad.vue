@@ -32,68 +32,34 @@
 <script>
 import FlowArrow from "../components/FlowArrow.vue"
 
-const fileHandler = {
-  sysProps: {
-    "fs" : null,
-    "path" : null,
-    "axios" : null,
-    "mime" : null
-  },
-  props : {
-    "quizFilePath" : null,
-    "quizFileDir" : null
-  }, 
-  methods : {
-    "init": () => {
-      fileHandler.sysProps.fs = window.require("fs");
-      fileHandler.sysProps.path = window.require("path");
-      fileHandler.sysProps.axios = window.require("axios");
-      fileHandler.sysProps.mime = window.require("mime-types");
-    },
-    "loadFileFromSystem": (filePath) => {
-        const { path, fs, axios, mime } = fileHandler.sysProps;
-        const { quizFileDir } = fileHandler.props;
-        const fullPath = path.join(quizFileDir, filePath);
+const fs = window.require("fs");
+const path = window.require("path");
+const mime = window.require("mime-types");
 
-        if (fileHandler.methods.canFileBeAccessed(filePath)) {
-          const data = fs.readFileSync(fullPath);
-          const type = mime.lookup(filePath);
+function loadFileFromSystem(dirPath, filePath){
+  const fullPath = path.join(dirPath, filePath);
 
-          axios.post(fullPath, data, {
-            headers: {
-              'Content-Type' : type
-            }   
-          });
+  const canFileBeAccessed = () => {
+    let canBeAccessed = true;
 
-          return { src: fullPath, type: type };
-        }
-        else{
-          return false;
-        }
-      },
+    try { 
+      fs.accessSync(fullPath, fs.constants.R_OK);
+    } catch (error) {
+      canBeAccessed = false;
 
-     "canFileBeAccessed": (filePath) => {
-        const { path, fs } = fileHandler.sysProps;
-        const { quizFileDir } = fileHandler.props;
-        const fullPath = path.join(quizFileDir, filePath);
-        let canBeAccessed = true;
-
-        try { 
-          fs.accessSync(fullPath, fs.constants.R_OK);
-        } catch (error) {
-          canBeAccessed = false;
-
-          alert(`File ${filePath} cannot be accessed.`);
-        }
-
-        return canBeAccessed;
-     },
-
-    "getFileDir": (filePath) => {
-      const { path } = fileHandler.sysProps;
-    
-      return path.dirname(filePath);
+      console.error(`File ${filePath} cannot be accessed.`);
     }
+
+    return canBeAccessed;
+  };
+
+  if (canFileBeAccessed()) {
+    const type = mime.lookup(filePath);
+
+    return { src: fullPath, type: type };
+  }
+  else {
+    return null;
   }
 }
 
@@ -115,23 +81,21 @@ export default {
       const reader = new FileReader();
 
       // A) electron used, B) we can get file-path of quiz File
-      if (event.target.files[0].path) {
-        fileHandler.methods.init();
-
-        const filePath = event.target.files[0].path;
-        fileHandler.props.quizFilePath = filePath;
-        fileHandler.props.quizFileDir = fileHandler.methods.getFileDir(filePath);
+      if (!event.target.files[0].path) {
+        return;
       }
 
       // load file
       reader.onload = (e) => {
         const quiz = JSON.parse(e.target.result);
 
+        const quizDirPath = path.dirname(event.target.files[0].path);
+
         //  we have file path of quiz, so we can read relative paths of media files
         //  we can now simply enforce our rule "keep media files bundled with quiz"
-        if (fileHandler.props.quizFilePath !== null) {
+        if (quizDirPath !== null) {
           for (const media in quiz.mediaFiles) {  
-            const file = fileHandler.methods.loadFileFromSystem(quiz.mediaFiles[media]);
+            const file = loadFileFromSystem(quizDirPath, quiz.mediaFiles[media]);
             
             if (file === false) {
               // file cannot be accessed
