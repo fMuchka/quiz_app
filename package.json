@@ -21,7 +21,6 @@
   },
   "homepage": "https://github.com/fMuchka/quiz_app#readme",
   "dependencies": {
-    "axios": "^0.21.1",
     "chart.js": "^2.9.4",
     "electron-reloader": "^1.2.0",
     "jest": "^26.4.2",
