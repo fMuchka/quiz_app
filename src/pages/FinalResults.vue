@@ -54,6 +54,7 @@
                         name="currentDisplay" 
                         v-model="currentDisplay" 
                         :value="item.id"
+                        @click="stopSlideShow()"
                     >
                     {{item.label}}
                 </label>
@@ -98,7 +99,11 @@ export default {
         return{
             sortedTeams: this.$store.getters.teamsSortedByScore,
             currentDisplay: 'chartView',
-            possibleDisplays: [{ id: "chartView", label: "Grafický přehled"}, { id: "tableView", label: "Tabulkový přehled"}]
+            possibleDisplays: [
+                { id: "chartView", label: "Grafický přehled"}, 
+                { id: "tableView", label: "Tabulkový přehled"}
+            ],
+            slideShowIntervalId : null
         }
     },
 
@@ -234,12 +239,12 @@ export default {
     methods:{
         startSlideShow(){
             const baseChangeTime = 10000; //miliseconds
-            const changeTimeLimit = baseChangeTime*6;
+            const changeTimeLimit = baseChangeTime * 6;
             
 
             let changeTime = baseChangeTime;
 
-            setInterval(() => {
+            this.slideShowIntervalId = setInterval(() => {
                 let newIndex;
                 const currentIndex = this.possibleDisplays.map(e => e.id).indexOf(this.currentDisplay);
 
@@ -259,6 +264,15 @@ export default {
                 changeTime += Math.log(changeTimeLimit) / Math.log(changeTime) * 1000 + baseChangeTime;
 
             }, changeTime);
+        },
+
+        stopSlideShow(){
+            const intervalId = this.slideShowIntervalId;
+
+            if (intervalId !== null) {
+                clearInterval(intervalId);
+                this.$set(this, "slideShowIntervalId", null);
+            }
         }
     }
 }
