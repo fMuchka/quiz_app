@@ -28,8 +28,22 @@
             {{questionText}}
         </div>
 
-        <div id="media">
-            <img alt="Ops Something went wrong" :src=mediaPath>
+        <div id="media"
+            v-if="this.mediaType === 'audio'"
+        >
+            <audio controls alt="Not the file you're looking for..." :src="mediaPath"/>
+        </div>
+
+        <div id="media"
+            v-if="this.mediaType === 'video'"
+        >
+            <video controls alt="Not the file you're looking for..." :src="mediaPath"/>
+        </div>
+
+        <div id="media"
+            v-if="this.mediaType === 'image'"
+        >
+            <img alt="Not the file you're looking for..." :src="mediaPath"/>
         </div>
     </div>  
 
@@ -116,8 +130,29 @@ export default {
         questionText(){
             return this.$store.getters.currentQuestion.text;
         },
+
         mediaPath(){
-            return this.$store.getters.currentQuestion.media;
+            const pointer = this.$store.getters.currentQuestion.media;
+            
+            if(this.$store.getters.quiz.mediaFiles[pointer] === undefined){
+                return "";
+            }
+
+            const { src } = this.$store.getters.quiz.mediaFiles[pointer];
+        
+            return src;
+        },
+
+        mediaType(){
+            const pointer = this.$store.getters.currentQuestion.media;
+
+            if(this.$store.getters.quiz.mediaFiles[pointer] === undefined){
+                return "";
+            }
+
+            const { type } = this.$store.getters.quiz.mediaFiles[pointer];
+
+            return type.split("/")[0];
         }
     }
 }
@@ -188,10 +223,18 @@ export default {
     transition: 0.5s all ease;
 }
 
-
-
 #value{
     position: absolute;
     margin-left: 12.5rem;
+}
+
+#media * {
+    width: 50%;
+}
+
+#media {
+    display: flex;
+    justify-content: center;
+    margin-top: 4%;
 }
 </style>
