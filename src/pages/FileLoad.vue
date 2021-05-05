@@ -97,7 +97,7 @@ export default {
           for (const media in quiz.mediaFiles) {  
             const file = loadFileFromSystem(quizDirPath, quiz.mediaFiles[media]);
             
-            if (file === false) {
+            if (file === null) {
               // file cannot be accessed
               quiz.mediaFiles[media] = undefined;
             }
