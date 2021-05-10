@@ -1,5 +1,8 @@
 <template>
-  <div id="wrapper">
+  <div 
+    id="wrapper"
+    v-if="lightBoxMode === false"
+  >
     <div id="top-area">
         <div id="theme-label">
             {{themeLabel}}
@@ -43,7 +46,11 @@
         <div id="media"
             v-if="this.mediaType === 'image'"
         >
-            <img alt="Not the file you're looking for..." :src="mediaPath"/>
+            <img 
+                alt="Not the file you're looking for..." 
+                :src="mediaPath"
+                @click="lightBoxMode = true"
+            />
         </div>
     </div>  
 
@@ -55,6 +62,22 @@
         :isForward="true"
         >
     </flow-arrow>
+  </div>
+
+  <div
+    id="wrapper-LB"
+    v-else
+    @click.self="lightBoxMode = false"
+  >
+    <img 
+        :src="mediaPath" 
+        alt="Not the file you're looking for..." 
+    />
+
+    <div id="question-text-LB">
+            {{questionText}}
+    </div>
+
   </div>
 </template>
 
@@ -68,6 +91,7 @@ export default {
 
     data(){
         return{
+            lightBoxMode: false
         }
     },
 
@@ -236,5 +260,29 @@ export default {
     display: flex;
     justify-content: center;
     margin-top: 4%;
+}
+
+#wrapper-LB {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #000000e6;
+    /* padding: 2.5%; */
+    position: absolute;
+    z-index: 5;
+    align-items: center;
+}
+
+#wrapper-LB > img {
+    width: 65%;
+    padding: 1% 2.5% 0;
+}
+
+#question-text-LB {
+    color: white;
+    text-align: center;
+    font-size: 1.5em;
+    padding: 1%;
 }
 </style>
