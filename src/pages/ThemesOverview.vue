@@ -3,6 +3,7 @@
         <button v-for="(item, index) in themes" 
             :key="index"
             @click="openFirstQuestion(index)"
+            :style="completedThemeStyle(index)"
             >
             {{ item.text }}  
         </button>
@@ -17,7 +18,7 @@ export default {
         }
     },
 
-    methods:{
+    methods: {
         openFirstQuestion(index){
             // go to first question of selected theme
             this.$store.commit("setCurrentTheme", index);
@@ -26,6 +27,16 @@ export default {
             this.$router.push({   
                         name: 'questionslide'  
             });
+        },
+
+         completedThemeStyle(index){
+            const completedThemes = this.$store.state.completedThemes;
+            
+            if (completedThemes[index] === true) {
+               return "background-color: green;"; 
+            }
+
+            return "";
         }
     }
 }

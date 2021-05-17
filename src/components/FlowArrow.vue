@@ -45,7 +45,10 @@ export default {
                 const nOfQuestions = this.$store.getters.currentTheme.questions.length;
 
                 if (this.isForward) {
-                    if (questionIndex === (nOfQuestions - 1)) {
+                    if (questionIndex === (nOfQuestions - 1)) {     
+                        const currentThemeID = this.$store.state.currentThemeID;
+                        this.$store.commit("markThemeCompleted", currentThemeID)
+
                         this.$router.push({   
                             name: 'themeanswers'  
                         });
