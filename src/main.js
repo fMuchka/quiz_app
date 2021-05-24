@@ -6,7 +6,10 @@ function createWindow() {
     width: 860,
     height: 680,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: true, // protect against prototype pollution
+      enableRemoteModule: false, // turn off remote,
+      preload: path.join(__dirname, "preload.js") // use a preload script
     },
   });
 

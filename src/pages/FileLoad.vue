@@ -32,11 +32,9 @@
 <script>
 import FlowArrow from "../components/FlowArrow.vue"
 
-const fs = window.require("fs");
-const path = window.require("path");
-const mime = window.require("mime-types");
+const { path, fs, mime } = window;
 
-function loadFileFromSystem(dirPath, filePath){
+function loadFileFromSystem (dirPath, filePath) {
   const fullPath = path.join(dirPath, filePath);
 
   const canFileBeAccessed = () => {
