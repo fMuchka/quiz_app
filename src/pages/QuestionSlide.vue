@@ -40,7 +40,11 @@
         <div id="media"
             v-if="this.mediaType === 'video'"
         >
-            <video controls alt="Not the file you're looking for..." :src="mediaPath"/>
+            <video 
+                controls 
+                alt="Not the file you're looking for..." 
+                :src="mediaPath"
+            />
         </div>
 
         <div id="media"
@@ -71,7 +75,7 @@
   >
     <img 
         :src="mediaPath" 
-        alt="Not the file you're looking for..." 
+        alt="Not the file you're looking for..."
     />
 
     <div id="question-text-LB">
@@ -158,7 +162,7 @@ export default {
         mediaPath(){
             const pointer = this.$store.getters.currentQuestion.media;
             
-            if(this.$store.getters.quiz.mediaFiles[pointer] === undefined){
+            if (this.$store.getters.quiz.mediaFiles[pointer] === undefined){
                 return "";
             }
 
@@ -170,7 +174,7 @@ export default {
         mediaType(){
             const pointer = this.$store.getters.currentQuestion.media;
 
-            if(this.$store.getters.quiz.mediaFiles[pointer] === undefined){
+            if (this.$store.getters.quiz.mediaFiles[pointer] === undefined){
                 return "";
             }
 
@@ -252,8 +256,11 @@ export default {
     margin-left: 12.5rem;
 }
 
-#media * {
-    width: 50%;
+#media img, #media video {
+    width: auto;
+    height: auto;
+    max-width: 60rem;
+    max-height: 40rem;
 }
 
 #media {
@@ -275,7 +282,10 @@ export default {
 }
 
 #wrapper-LB > img {
-    width: 65%;
+    width: auto;
+    height: auto;
+    max-width: 80rem;
+    max-height: 55rem;
     padding: 1% 2.5% 0;
 }
 

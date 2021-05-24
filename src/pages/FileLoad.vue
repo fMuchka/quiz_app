@@ -22,9 +22,9 @@
     </flow-arrow>
 
     <label for="quizLoadInput"> Otevři kvíz </label>
-    <div>
-      <b>Loaded data:</b>
-      {{ loadedQuizData }}
+    
+    <div id="load-status">
+      <b>Quiz Loaded: {{ loadedQuizData !== null }}</b>  
     </div>
   </div>
 </template>
@@ -143,6 +143,13 @@ label[for="quizLoadInput"] {
 label[for="quizLoadInput"]:hover {
   cursor: pointer;
   color: 003049;
+}
+
+#load-status {
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    margin-top: 1rem;
 }
 </style>
 

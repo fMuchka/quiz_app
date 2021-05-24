@@ -300,7 +300,9 @@ export default {
     border-bottom: 1px solid black;
     display: flex;
     height: 20%;
-    padding: 10px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 #input-table{

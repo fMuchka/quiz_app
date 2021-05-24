@@ -14,7 +14,9 @@ export default {
         currentQuestionID: null,
         currentThemeID: null,
 
-        scoreTemplate: {}
+        scoreTemplate: {},
+
+        completedThemes: {}
     },
 
     mutations: {
@@ -52,6 +54,10 @@ export default {
 
         setCurrentTheme(state, t) {
             state.currentThemeID = t;
+        },
+
+        markThemeCompleted(state, key) {
+            state.completedThemes[key] = true;
         }
     },
 
