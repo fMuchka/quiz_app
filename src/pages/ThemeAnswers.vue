@@ -36,6 +36,8 @@
     <flow-arrow
         :isForward="true"
         :nextPage="'scoreboard'"
+        :nextPageLabel="'Body'"
+        :qMode="false"
         >
     </flow-arrow>
   </div>
