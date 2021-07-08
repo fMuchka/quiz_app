@@ -4,31 +4,23 @@
     v-if="lightBoxMode === false"
   >
     <div id="top-area">
-        <div id="theme-label">
-            {{themeLabel}}
-        </div>
-        <div id="q-identity">
-            {{questionIdentity}}
-        </div>
         <div id="points-info">
-            {{pointsInfoText}}
+            {{ pointsInfoText }}
         </div>
         <div id="theme-progress-bar">
             <div 
-                id="bar"
-                :style=progressBar
-                >            
-            </div>
-            <div
-                id="value">
-                {{progressInfo}}
+                v-for="(item, index) in nOfQuestionsInTheme"
+                :key="index"
+                class="progress-bar-item"
+                :style="progressBarFill(index)"
+            >          
             </div>
         </div>
     </div>
     <div id="split-line"></div>
     <div id="bottom-area">
         <div id="question-text">
-            {{questionText}}
+            {{ questionText }}
         </div>
 
         <div id="media"
@@ -60,10 +52,12 @@
 
     <flow-arrow 
             :isForward="false"
+            :qMode="true"
             >
     </flow-arrow>
     <flow-arrow
         :isForward="true"
+        :qMode="true"
         >
     </flow-arrow>
   </div>
@@ -79,7 +73,7 @@
     />
 
     <div id="question-text-LB">
-            {{questionText}}
+        {{ questionText }}
     </div>
 
   </div>
@@ -102,9 +96,6 @@ export default {
     computed:{
         themeLabel(){
             return this.$store.getters.currentTheme.text;
-        },
-        questionIdentity(){
-            return `Otázka č.${this.$store.getters.currentQuestionIndex+1}`;
         },
         pointsInfo(){
             const points = this.$store.getters.currentQuestion.points.max;
@@ -149,12 +140,15 @@ export default {
             
             return [firstPart, secondPart].join(', ');
         },
-        progressInfo(){
-            return this.$store.getters.currentQuestionIndex/(this.$store.getters.currentTheme.questions.length-1)*100 + "%";
+
+        nOfQuestionsInTheme(){
+            return this.$store.getters.currentTheme.questions.length;
         },
-        progressBar(){
-            return `width: ${this.$store.getters.currentQuestionIndex/(this.$store.getters.currentTheme.questions.length-1)*100}%`;
+
+        currentQIndex(){
+            return this.$store.getters.currentQuestionIndex;
         },
+
         questionText(){
             return this.$store.getters.currentQuestion.text;
         },
@@ -182,6 +176,18 @@ export default {
 
             return type.split("/")[0];
         }
+    },
+
+    methods:{
+        progressBarFill(index){
+                    
+            if (index === this.currentQIndex) {
+                return "background-color: var(--secondary-color)";
+            }
+            else{
+                return "background: transparent";
+            }
+        },
     }
 }
 </script>
@@ -211,39 +217,34 @@ export default {
 #top-area {
     display: grid;
     grid-template-areas:
-        ". q-identity ."
-        "theme-label points-info theme-progress-bar";
+        ". points-info ."
+        "theme-progress-bar theme-progress-bar theme-progress-bar";
     grid-template-rows: 1fr 1fr;
     grid-template-columns: 1fr 1fr 1fr;
     justify-items: center;
     align-items: center;
 }
 
-#theme-label {
-    grid-area: theme-label;
-    font-size: 32px;
-    }
-
-#q-identity {
-    grid-area: q-identity;
-    font-size: 32px;
-    text-decoration: underline;
-    align-self: end;
-}
-
 #points-info {
     grid-area: points-info;
     font-size: 28px;
-    align-self: start;
+    align-self: center;
 }
 
 #theme-progress-bar {
     grid-area: theme-progress-bar;
-    height: 40%;
-    width: 25vw;
-    border: 1px solid black;
+    height: 60px;
+    width: 80%;
     display: flex;
-    background-color: white;
+    align-items: center;
+    place-content: space-evenly;
+}
+
+.progress-bar-item {
+    height: 35px;
+    width: 35px;
+    border: 1px solid black;
+    border-radius: 20px;
 }
 
 #bar{
