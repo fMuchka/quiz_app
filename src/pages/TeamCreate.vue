@@ -15,7 +15,10 @@
     <flow-arrow
         :isForward="true"
         :nextPage="'themesoverview'"
-        >
+        :nextPageLabel="'Přejdi ke kvízu'"
+        :qMode="false"
+        :disabled="teamList.length === 0"
+    >
     </flow-arrow>
   </div>
 </template>
