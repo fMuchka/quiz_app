@@ -18,12 +18,14 @@ new Vue({
 
   mounted: function () {
     // Attach event listener to the root vue element
-    this.$el.addEventListener('click', this.outSideMenuClick)
+    this.$el.addEventListener('click', this.outSideMenuClick);
+
+    this.$router.push("/fileload")
     // Or if you want to affect everything
     // document.addEventListener('click', this.onClick)
   },
   beforeUnmount: function () {
-    this.$el.removeEventListener('click', this.outSideMenuClick)
+    this.$el.removeEventListener('click', this.outSideMenuClick);
     // document.removeEventListener('click', this.onClick)
   },
   methods: {
