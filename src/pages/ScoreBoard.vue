@@ -14,30 +14,21 @@
           :key="index"
           :style="'color:' + item.color"
         >
-          <p>{{item.label}}</p>
-
-          <div
-            class="total-team-score"
+          <div 
+            class="team-label"
           >
-            {{getTeamTotal(index)}}
+            {{item.label}}
           </div>
-
         </div>
       </div>
 
-      <select 
-        id="theme-selector" 
-        v-model="currentThemeID"
+
+      <div 
+        id="theme-label"
       >
-        <option 
-          v-for="(t, key) in themes"
-          :key="key"
-          :value="key"
-        >
-        {{t.text}}
-        </option>
-      </select>
-    
+        {{ currentTheme.text }}
+      </div>
+      
       <div
         id="questions"
       >
@@ -45,7 +36,7 @@
           v-for="q in currentTheme.questions"
           :key="q"
         >
-          {{questions[q].text}}
+          <div> {{ questions[q].text }} </div>
         </div>
       </div>
 
@@ -70,14 +61,28 @@
               min="0"
             >
           </div>
-        </div>
-        
+
+          <div
+            class="total-team-score"
+            :style="'color:' + t.color"
+          >
+            {{ getTeamTotal(tKey) }}
+          </div>  
+        </div> 
       </div>
+
+      <flow-arrow
+          :isForward="false"
+          :nextPage="'themeanswers'"
+          :qMode="true"
+          >
+      </flow-arrow>
 
       <flow-arrow
         v-if="isLastTheme === true"
           :isForward="true"
           :nextPage="'finalresults'"
+          :qMode="true"
           >
       </flow-arrow>
 
@@ -85,6 +90,7 @@
         v-else
           :isForward="true"
           :nextPage="'themesoverview'"
+          :qMode="true"
           >
       </flow-arrow>
     </div>
@@ -159,17 +165,30 @@ export default {
     },
 
     chartData(){
+      const teams = this.$store.getters.teamsSortedByScore;
+      const totalScores = [];
+      const colors = [];
+      const labels = [];
+
+      teams.forEach(e => { 
+        totalScores.push(e.score.total);
+        colors.push(e.color); 
+        labels.push(e.label);
+      });
+
       const data = {
         datasets: [
             {
-              data: this.$store.getters.teamTotalScores,
+              data: totalScores,
               label: "",
-              backgroundColor: this.$store.getters.teamColors
+              backgroundColor: colors
             },   
           ],
 
-          labels: this.$store.getters.teamLabels
+        labels: labels
       };
+
+
       return data;
     }
   },
@@ -231,100 +250,108 @@ export default {
 <style scoped>
 
 #wrapper{
-    display: grid;
-    grid-template-areas:
-        "label teams"
-        "label teams"
-        "questions inputs";
-    height: 80%;
-    width: 90%;
-    margin: auto;
-    grid-template-columns: 30% 70%;
-    grid-template-rows: 10% 10% 80%;
-    position: relative;
-    border: 1px solid black;
+  display: grid;
+  grid-template-areas:
+      "label teams"
+      "questions inputs";
+  width: 85%;
+  margin: 5rem auto;
+  grid-template-columns: 30% 70%;
+  position: relative;
 }
 
 #mini-chart {
-    height: 10rem;
-    width: 80%;
-    margin: auto;
+  height: 10rem;
+  width: 80%;
+  margin: 2.5rem auto;
 }
 
 #teams-wrapper {
-    grid-area: teams;
-    display: flex;
+  grid-area: teams;
+  display: flex;
+  height: 100px;
 }
 
 #teams-wrapper > div {
-    font-size: 32px;
-    text-align: center;
-    height: 100%;
-    width: 100%;
-    display: grid;
-    align-items: center;
-    grid-template-rows: 70%;
+  font-size: 32px;
+  text-align: center;
+  width: 100%;
+  display: grid;
+  align-items: center;
+  height: 100px;
+}
+
+#theme-label {
+  grid-area: label;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  font-size: 48px;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+  font-weight: bold;
+  color: black;
+  height: 100%;
+}
+
+.team-label {
+  font-size: initial;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .total-team-score {
-    font-size: 36px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    border-bottom: 3px solid black;
-    border-top: 1px solid black;
-}
-
-#theme-selector {
-    grid-area: label;
-    align-self: center;
-    display: flex;
-    justify-content: center;
-    font-size: 48px;
-    height: 100%;
-    font-weight: bold;
-    border: none;
-    text-align-last: center;
-    text-decoration: underline;
+  font-size: 36px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  border-right: 1px solid black;
 }
 
 #questions {
-    grid-area: questions;
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid black;
+  grid-area: questions;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid black;
 }
 
 #questions > div {
-    border-bottom: 1px solid black;
-    display: flex;
-    height: 20%;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+  display: flex;
+  height: 100px;
+  text-align: center;
+}
+
+#questions > div > div {
+    padding: 5px;
 }
 
 #input-table{
-    display: flex;
-    flex-direction: row;
-    grid-area: inputs;
+  display: flex;
+  flex-direction: row;
+  grid-area: inputs;
 }
 
 .input-column {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: center;
 }
 
 .input-wrapper {
-    height: 20%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-bottom: 1px solid black;
-    border-right: 1px solid black;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
 }
 
 input[type="number"] {
