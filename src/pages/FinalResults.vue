@@ -138,7 +138,7 @@ export default {
                         backgroundColor: teamColor,
                         fill: false,
                         borderColor: teamColor,
-                        //steppedLine: true
+                        steppedLine: true
                     }
                 )
             }
@@ -150,11 +150,8 @@ export default {
         AllQuestionsChartOptions(){
             const store = this.$store;
             const options = {
-                animation:{
-                    duration: 0
-                },
                 legend: {
-                    display: true
+                    display: false
                 },
                 scales: {
                     xAxes: [
@@ -165,6 +162,7 @@ export default {
                                 suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
                                 // OR //
                                 beginAtZero: true,   // minimum value will be 0.
+                                fontSize: 18,
 
                                 callback: function(label, index){
                                     if (index !== 0 ) return "Otázka " + index;
@@ -181,7 +179,6 @@ export default {
                                 color: "black"
                             },
                             ticks: {
-                                
                                 suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
                                 // OR //
                                 beginAtZero: true,   // minimum value will be 0.
@@ -205,7 +202,8 @@ export default {
                     yAxes: [{
                         position: "right",
                         ticks:{
-                            max: this.$store.getters.quizPointsMaximum
+                            max: this.$store.getters.quizPointsMaximum,
+                            fontSize: 18
                         }
                     }]
                 },
@@ -225,7 +223,38 @@ export default {
                         }
                     }
 
-                }
+                },
+                animation:{
+                    duration: 0,
+
+                    onComplete: function() {
+                        const chartInstance = this.chart,
+                        ctx = chartInstance.ctx;
+
+                        ctx.font = Chart.helpers.fontString(
+                        30,
+                        Chart.defaults.global.defaultFontStyle,
+                        Chart.defaults.global.defaultFontFamily
+                        );
+                        ctx.textAlign = "end";
+                        ctx.textBaseline = "bottom";
+
+                        this.data.datasets.forEach(function(dataset, i) {
+                            const meta = chartInstance.controller.getDatasetMeta(i);
+                            
+                            meta.data.forEach(function(bar, index) {
+
+                                if (index === meta.data.length - 1){
+                                    const data = dataset.label;
+                                    ctx.fillStyle = dataset.backgroundColor;
+
+                                    ctx.fillText(data, bar._model.x, bar._model.y - 2);
+                                }
+                            });
+                        });
+                    }
+                },
+                
             };
             
             return options;
