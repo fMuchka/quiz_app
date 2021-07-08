@@ -1,13 +1,16 @@
 <template>
   <div 
     id="background"
-    :class="arrowStyle"
+    :class="arrowStyle + ' ' + modeStyle"
     @click="move()"
     >
-      <div
-        id="arrow"
+
+        <span> {{ nextPageLabel }} </span>
+        <div
+            id="arrow"
         >
-      </div>
+        </div>
+ 
   </div>
 </template>
 
@@ -15,7 +18,9 @@
 export default {
     data(){
         return {
-            isForward: this.$attrs.isForward
+            isForward: this.$attrs.isForward,
+            nextPageLabel: this.$attrs.nextPageLabel,
+            qMode: this.$attrs.qMode
         };
     },
 
@@ -27,48 +32,60 @@ export default {
             else{
                 return "left";
             }
+        },
+        modeStyle(){
+           if (this.qMode === true) {
+                return "qMode";
+            }
+            else{
+                return "setupMode";
+            } 
         }
     },
 
     methods:{
         move(){
-            const nextPage = this.$attrs.nextPage;
+            const disabled = this.$attrs.disabled;
+
+            if (disabled !== true) {
+                const nextPage = this.$attrs.nextPage;
             
-            if(nextPage !== undefined){
-                this.$router.push({   
-                        name: nextPage  
-                    });
-            }
-            else{
-
-                const questionIndex = this.$store.getters.currentQuestionIndex;
-                const nOfQuestions = this.$store.getters.currentTheme.questions.length;
-
-                if (this.isForward) {
-                    if (questionIndex === (nOfQuestions - 1)) {     
-                        const currentThemeID = this.$store.state.currentThemeID;
-                        this.$store.commit("markThemeCompleted", currentThemeID)
-
-                        this.$router.push({   
-                            name: 'themeanswers'  
+                if(nextPage !== undefined){
+                    this.$router.push({   
+                            name: nextPage  
                         });
-                    }
-                    else{
-                        this.$store.dispatch('nextQuestion');
-                    }
-                    
                 }
                 else{
-                    if (questionIndex === 0) {
-                        this.$router.push({   
-                            name: 'themesoverview'  
-                        });
+
+                    const questionIndex = this.$store.getters.currentQuestionIndex;
+                    const nOfQuestions = this.$store.getters.currentTheme.questions.length;
+
+                    if (this.isForward) {
+                        if (questionIndex === (nOfQuestions - 1)) {     
+                            const currentThemeID = this.$store.state.currentThemeID;
+                            this.$store.commit("markThemeCompleted", currentThemeID)
+
+                            this.$router.push({   
+                                name: 'themeanswers'  
+                            });
+                        }
+                        else{
+                            this.$store.dispatch('nextQuestion');
+                        }
+                        
                     }
                     else{
-                        this.$store.dispatch('previousQuestion');
-                    }       
-                }
-            }   
+                        if (questionIndex === 0) {
+                            this.$router.push({   
+                                name: 'themesoverview'  
+                            });
+                        }
+                        else{
+                            this.$store.dispatch('previousQuestion');
+                        }       
+                    }
+                }   
+            }
         }
     }
 }
@@ -98,9 +115,7 @@ export default {
     }
 
     #background{
-        position: fixed;
         top: 50%;
-        width: 50px;
         height: 50px;
         background-color: grey;
         cursor: pointer;
@@ -127,5 +142,35 @@ export default {
     #background.left{
         left: 0;
         border-radius: 0 5px 5px 0;
+    }
+
+    .setupMode{
+        position: relative;
+        margin: auto;
+        margin-top: 1%;
+        width: 250px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 50px;
+    }
+
+    .setupMode #arrow {
+        display: none;
+    }
+
+    .qMode{
+        position: fixed;
+        width: 50px;
+    }
+
+    #background span {
+        color: var(--secondary-color);
+        font-size: 26px   
+    }
+
+    #background[disabled] {
+        filter: grayscale(1);
+        opacity: 0.6;
     }
 </style>
