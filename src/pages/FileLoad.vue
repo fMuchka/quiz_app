@@ -14,18 +14,35 @@
       v-on:change="loadFile"
     />
 
+    <label for="quizLoadInput"> 
+      Otevři kvíz 
+    </label>
+    
+    <div id="load-status">
+      <b>Nahráno?</b>  
+      <span 
+        v-if="loadedQuizData !== null"
+        style="color: green; margin-left: 5px;"
+      >
+        ✔
+      </span>
+      <span
+        v-else
+        style="color: red; margin-left: 5px;"
+      >
+        x
+      </span>
+    </div>
+
 
     <flow-arrow
         :isForward="true"
         :nextPage="'teamcreate'"
+        :nextPageLabel="'Vytvoř týmy'"
+        :qMode="false"
+        :disabled="loadedQuizData === null"
         >
     </flow-arrow>
-
-    <label for="quizLoadInput"> Otevři kvíz </label>
-    
-    <div id="load-status">
-      <b>Quiz Loaded: {{ loadedQuizData !== null }}</b>  
-    </div>
   </div>
 </template>
 
