@@ -1,12 +1,25 @@
 <template>
     <div id="overviewWrapper">
-        <button v-for="(item, index) in themes" 
+        <div v-for="(item, index) in themes" 
             :key="index"
+        >
+        <button  
+            class="themeButton"
             @click="openFirstQuestion(index)"
             :style="completedThemeStyle(index)"
-            >
+        >
             {{ item.text }}  
         </button>
+
+        <button
+            class="answersButton"
+            @click="openThemeAnswers(index)"
+            :disabled="!isThemeCompleted(index)"
+        >
+            Odpovědi
+        </button>
+        </div>
+        
     </div>
 </template>
 
@@ -29,7 +42,15 @@ export default {
             });
         },
 
-         completedThemeStyle(index){
+        openThemeAnswers(index){
+            this.$store.commit("setCurrentTheme", index);
+            
+            this.$router.push({   
+                        name: 'themeanswers'  
+            });
+        },
+
+        completedThemeStyle(index){
             const completedThemes = this.$store.state.completedThemes;
             
             if (completedThemes[index] === true) {
@@ -37,6 +58,16 @@ export default {
             }
 
             return "";
+        },
+
+        isThemeCompleted(index){
+            const completedThemes = this.$store.state.completedThemes;
+            
+            if (completedThemes[index] === true) {
+               return true; 
+            }
+
+            return false;
         }
     }
 }
@@ -49,9 +80,11 @@ export default {
     height: 100%;
     width: 80%;
     margin: auto;
+    flex-direction: column;
+    overflow-y: auto;
 }
 
-#overviewWrapper > button {
+.themeButton {
     background-color: var(--secondary-color);
     color: white;
     border: none;
@@ -61,8 +94,24 @@ export default {
     margin: auto;
 }
 
-#overviewWrapper > button:hover {
+.themeButton:hover {
     cursor: pointer;
     color: 003049;
+}
+
+#overviewWrapper div {
+    display: flex;
+    flex-direction: column;
+    margin: 50px 0;
+}
+
+.answersButton {
+    width: 40%;
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    height: 50px;
+    align-items: center;
+    cursor: pointer;
 }
 </style>
