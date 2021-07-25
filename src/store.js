@@ -9,6 +9,8 @@ export default {
             { id: 'yellow', label: 'Žlutý', used: false },
             { id: 'purple', label: 'Fialový', used: false },
             { id: 'brown', label: 'Hnědý', used: false },
+            { id: 'orange', label: 'Oranžový', used: false },
+            { id: 'pink', label: 'Růžový', used: false },
         ],
         isMenuHidden: true,
         currentQuestionID: null,
@@ -49,7 +51,7 @@ export default {
         },
 
         firstQuestion(state) {
-            state.currentQuestionID = state.quiz.themes[state.currentThemeID].questions[0];  
+            state.currentQuestionID = state.quiz.themes[state.currentThemeID].questions[0];
         },
 
         setCurrentTheme(state, t) {
@@ -62,7 +64,7 @@ export default {
     },
 
     actions: {
-        setupScoreTemplate({state}) {
+        setupScoreTemplate({ state }) {
             const quiz = state.quiz;
             let scoreTemplate = state.scoreTemplate;
             let questions = {};
@@ -169,7 +171,7 @@ export default {
 
             return (currentIndex === flow.length - 1);
         },
-         
+
         currentQuestionIndex(state) {
             const currentTheme = state.currentThemeID;
             const currentQuestion = state.currentQuestionID;
@@ -239,7 +241,7 @@ export default {
             }
 
             sorted.sort((a, b) => {
-                return  b.score.total - a.score.total;
+                return b.score.total - a.score.total;
             });
 
             return sorted;
@@ -248,10 +250,10 @@ export default {
         quizPointsMaximum(state) {
             const questions = state.quiz.questions;
             let max = 0;
-            
-           for (const key in questions) {
-               max += questions[key].points.max;
-           }
+
+            for (const key in questions) {
+                max += questions[key].points.max;
+            }
 
             return max;
         },

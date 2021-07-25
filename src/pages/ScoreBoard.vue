@@ -1,11 +1,10 @@
 <template>
-
   <div>
-     <mini-chart 
-        id="mini-chart"
-        :chartData="chartData" 
-        :options="chartOptions"
-      />
+    <mini-chart
+      id="mini-chart"
+      :chartData="chartData"
+      :options="chartOptions"
+    />
 
     <div id="wrapper">
       <div id="teams-wrapper">
@@ -14,40 +13,24 @@
           :key="index"
           :style="'color:' + item.color"
         >
-          <div 
-            class="team-label"
-          >
-            {{item.label}}
+          <div class="team-label">
+            {{ item.label }}
           </div>
         </div>
       </div>
 
-
-      <div 
-        id="theme-label"
-      >
+      <div id="theme-label">
         {{ currentTheme.text }}
       </div>
-      
-      <div
-        id="questions"
-      >
-        <div
-          v-for="q in currentTheme.questions"
-          :key="q"
-        >
-          <div> {{ questions[q].text }} </div>
+
+      <div id="questions">
+        <div v-for="q in currentTheme.questions" :key="q">
+          <div>{{ questions[q].text }}</div>
         </div>
       </div>
 
-      <div
-        id="input-table"
-      >
-        <div
-          class="input-column"
-          v-for="(t, tKey) in teams"
-          :key="tKey"
-        >
+      <div id="input-table">
+        <div class="input-column" v-for="(t, tKey) in teams" :key="tKey">
           <div
             class="input-wrapper"
             v-for="(q, qKey) in currentTheme.questions"
@@ -59,147 +42,138 @@
               :step="questions[q].points.increment"
               :max="questions[q].points.max"
               min="0"
-            >
+            />
           </div>
 
-          <div
-            class="total-team-score"
-            :style="'color:' + t.color"
-          >
+          <div class="total-team-score" :style="'color:' + t.color">
             {{ getTeamTotal(tKey) }}
-          </div>  
-        </div> 
+          </div>
+        </div>
       </div>
 
-      <flow-arrow
-          :isForward="false"
-          :nextPage="'themeanswers'"
-          :qMode="true"
-          >
+      <flow-arrow :isForward="false" :nextPage="'themeanswers'" :qMode="true">
       </flow-arrow>
 
       <flow-arrow
         v-if="isLastTheme === true"
-          :isForward="true"
-          :nextPage="'finalresults'"
-          :qMode="true"
-          >
+        :isForward="true"
+        :nextPage="'finalresults'"
+        :qMode="true"
+      >
       </flow-arrow>
 
       <flow-arrow
         v-else
-          :isForward="true"
-          :nextPage="'themesoverview'"
-          :qMode="true"
-          >
+        :isForward="true"
+        :nextPage="'themesoverview'"
+        :qMode="true"
+      >
       </flow-arrow>
     </div>
   </div>
-  
 </template>
 
 <script>
-import FlowArrow from "../components/FlowArrow.vue"
-import MiniChart from "../components/MiniChart.vue"
+import FlowArrow from "../components/FlowArrow.vue";
+import MiniChart from "../components/MiniChart.vue";
 
 export default {
-  name: 'ScoreBoard',
-  components:{
+  name: "ScoreBoard",
+  components: {
     FlowArrow,
-    MiniChart
+    MiniChart,
   },
 
-  data(){
-    return{
+  data() {
+    return {
       chartOptions: {
-          legend: {
-            display: false
-          },
-          scales: {
-              xAxes: [{
-                display: true,
-                ticks: {
-                    suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
-                    // OR //
-                    beginAtZero: true   // minimum value will be 0.
-                }
-              }],
-              yAxes: [{
-                
-              }]
-          },
-          responsive: true,
-          maintainAspectRatio: false
-      }
-    }
+        legend: {
+          display: false,
+        },
+        scales: {
+          xAxes: [
+            {
+              display: true,
+              ticks: {
+                suggestedMin: 0, // minimum will be 0, unless there is a lower value.
+                // OR //
+                beginAtZero: true, // minimum value will be 0.
+              },
+            },
+          ],
+          yAxes: [{}],
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+      },
+    };
   },
 
-  computed:{
-    teams(){
+  computed: {
+    teams() {
       return this.$store.state.teams;
     },
 
-    themes(){
+    themes() {
       return this.$store.state.quiz.themes;
     },
 
-    questions(){
+    questions() {
       return this.$store.state.quiz.questions;
     },
 
-    currentTheme(){ 
+    currentTheme() {
       return this.$store.getters.currentTheme;
     },
 
-    currentThemeID:{
-      set(value){
+    currentThemeID: {
+      set(value) {
         this.$store.commit("setCurrentTheme", value);
       },
-      get(){
+      get() {
         return this.$store.state.currentThemeID;
-      }
+      },
     },
 
-    isLastTheme(){
+    isLastTheme() {
       return this.$store.getters.isLastTheme;
     },
 
-    chartData(){
+    chartData() {
       const teams = this.$store.getters.teamsSortedByScore;
       const totalScores = [];
       const colors = [];
       const labels = [];
 
-      teams.forEach(e => { 
+      teams.forEach((e) => {
         totalScores.push(e.score.total);
-        colors.push(e.color); 
+        colors.push(e.color);
         labels.push(e.label);
       });
 
       const data = {
         datasets: [
-            {
-              data: totalScores,
-              label: "",
-              backgroundColor: colors
-            },   
-          ],
+          {
+            data: totalScores,
+            label: "",
+            backgroundColor: colors,
+          },
+        ],
 
-        labels: labels
+        labels: labels,
       };
 
-
       return data;
-    }
+    },
   },
 
-  watch:{
-    teams:{
+  watch: {
+    teams: {
       deep: true,
 
-      handler(){
+      handler() {
         for (let i = 0; i < this.teams.length; i++) {
-          const score = this.teams[i].score; 
+          const score = this.teams[i].score;
           let sum = 0;
 
           let scoreMap = {};
@@ -215,19 +189,19 @@ export default {
 
           for (let j = 0; j < currentTheme.questions.length; j++) {
             const themeQ = currentTheme.questions[j];
-            
+
             themeSum += scoreMap[themeQ];
           }
 
           score.total = sum;
           score.themes[this.currentThemeID] = themeSum;
         }
-      }
-    } 
+      },
+    },
   },
 
-  methods:{
-    getTeamTotal(teamIndex){
+  methods: {
+    getTeamTotal(teamIndex) {
       const team = this.teams[teamIndex];
       const allQ = team.score.questions;
       const currentQ = this.currentTheme.questions;
@@ -243,17 +217,16 @@ export default {
 
       return sum;
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
-
-#wrapper{
+#wrapper {
   display: grid;
   grid-template-areas:
-      "label teams"
-      "questions inputs";
+    "label teams"
+    "questions inputs";
   width: 85%;
   margin: 5rem auto;
   grid-template-columns: 30% 70%;
@@ -325,14 +298,14 @@ export default {
   border-left: 1px solid black;
   display: flex;
   height: 100px;
-  text-align: center;
+  text-align: start;
 }
 
 #questions > div > div {
-    padding: 5px;
+  padding: 5px;
 }
 
-#input-table{
+#input-table {
   display: flex;
   flex-direction: row;
   grid-area: inputs;
@@ -355,13 +328,12 @@ export default {
 }
 
 input[type="number"] {
-    width: 75%;
-    height: 75%;
-    font-size: 40px;
-    text-align: center;
-    background-color: var(--main-color);
-    border: none;
+  width: 75%;
+  height: 75%;
+  font-size: 40px;
+  text-align: center;
+  background-color: var(--main-color);
+  border: none;
+  color: white;
 }
-
-
 </style>

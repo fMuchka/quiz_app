@@ -13,7 +13,7 @@ new Vue({
   router,
   store,
   components: {
-    navigationMenu
+    navigationMenu,
   },
 
   mounted: function () {
@@ -31,7 +31,7 @@ new Vue({
   methods: {
     outSideMenuClick: function (ev) {
       const check = ev.path.find(element => element.id === "menu-wrapper");
-      
+
       if (check === undefined) {
         this.$store.commit("hideMenu");
       }
