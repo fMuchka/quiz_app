@@ -1,5 +1,5 @@
 <template>
-  <div id="background" :class="arrowStyle + ' ' + modeStyle" @click="move()">
+  <div id="background" :class="[arrowStyle, modeStyle]" @click="move()">
     <span> {{ nextPageLabel }} </span>
     <div id="arrow"></div>
   </div>

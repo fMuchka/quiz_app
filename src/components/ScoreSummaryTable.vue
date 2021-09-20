@@ -39,8 +39,8 @@
             :key="'q' + qIndex"
             class="question-label"
           >
-            <!--{{ qIndex + themes[theme].questions.length * flowIndex + 1 }} -->
-            {{ shortQText(questions[question].text) }}
+
+            {{ questions[question].text }}
           </div>
         </div>
 
@@ -97,17 +97,6 @@ export default {
 
     gridRowCount(theme) {
       return this.forScoreRender[theme].questions.length;
-    },
-  },
-
-  methods: {
-    shortQText(qText) {
-      if (qText.length > 30) {
-        qText = qText.slice(0, 30);
-        qText += "...";
-      }
-
-      return qText;
     },
   },
 };
@@ -182,6 +171,9 @@ export default {
 .question-label {
   border-bottom: 1px solid black;
   height: 30px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .q-info .question-label:last-child {
