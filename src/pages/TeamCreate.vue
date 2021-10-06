@@ -1,9 +1,12 @@
 <template>
   <div id="pageWrapper">
-    <label for="addButton">Přidat tým</label>
-    <button id="addButton" @click="addTeamInput()" :disabled="isAddDisabled">
-      +
-    </button>
+    <label for="addButton"
+      >Přidat tým
+      <button id="addButton" @click="addTeamInput()" :disabled="isAddDisabled">
+        +
+      </button>
+    </label>
+
     <team-create-input
       v-for="(team, index) in teamList"
       :key="team.id"
@@ -13,9 +16,12 @@
     />
 
     <flow-arrow
-        :isForward="true"
-        :nextPage="'themesoverview'"
-        >
+      :isForward="true"
+      :nextPage="'themesoverview'"
+      :nextPageLabel="'Přejdi ke kvízu'"
+      :qMode="false"
+      :disabled="teamList.length === 0"
+    >
     </flow-arrow>
   </div>
 </template>
@@ -27,7 +33,7 @@ import FlowArrow from "../components/FlowArrow.vue";
 export default {
   components: {
     TeamCreateInput,
-    FlowArrow
+    FlowArrow,
   },
 
   data() {
@@ -83,7 +89,7 @@ export default {
 }
 
 label[for="addButton"] {
-  font-size: 20px;
+  font-size: 40px;
   margin-bottom: 0.5rem;
   user-select: none;
   font-weight: bold;
@@ -104,9 +110,9 @@ label[for="addButton"] {
   margin-bottom: 2.5rem;
 }
 #addButton:hover,
-label[for="addButton"] {
+label[for="addButton"]:hover {
   cursor: pointer;
-  color: 003049;
+  filter: brightness(0.8);
 }
 
 #addButton:disabled {

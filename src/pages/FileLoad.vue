@@ -1,10 +1,6 @@
 <template>
   <div>
-    <img
-      id="logo"
-      src="assets/sviniPivemNezarmoutis_logo.png"
-      alt="nope"
-    />
+    <img id="logo" src="assets/sviniPivemNezarmoutis_logo.png" alt="nope" />
 
     <input
       id="quizLoadInput"
@@ -14,33 +10,42 @@
       v-on:change="loadFile"
     />
 
+    <label for="quizLoadInput"> Otevři kvíz </label>
+
+    <div id="load-status">
+      <b>Nahráno?</b>
+      <span
+        v-if="loadedQuizData !== null"
+        style="color: green; margin-left: 5px"
+      >
+        ✔
+      </span>
+      <span v-else style="color: red; margin-left: 5px"> x </span>
+    </div>
 
     <flow-arrow
-        :isForward="true"
-        :nextPage="'teamcreate'"
-        >
+      :isForward="true"
+      :nextPage="'teamcreate'"
+      :nextPageLabel="'Vytvoř týmy'"
+      :qMode="false"
+      :disabled="loadedQuizData === null"
+    >
     </flow-arrow>
-
-    <label for="quizLoadInput"> Otevři kvíz </label>
-    
-    <div id="load-status">
-      <b>Quiz Loaded: {{ loadedQuizData !== null }}</b>  
-    </div>
   </div>
 </template>
 
 <script>
-import FlowArrow from "../components/FlowArrow.vue"
+import FlowArrow from "../components/FlowArrow.vue";
 
 const { path, fs, mime } = window;
 
-function loadFileFromSystem (dirPath, filePath) {
+function loadFileFromSystem(dirPath, filePath) {
   const fullPath = path.join(dirPath, filePath);
 
   const canFileBeAccessed = () => {
     let canBeAccessed = true;
 
-    try { 
+    try {
       fs.accessSync(fullPath, fs.constants.R_OK);
     } catch (error) {
       canBeAccessed = false;
@@ -55,15 +60,14 @@ function loadFileFromSystem (dirPath, filePath) {
     const type = mime.lookup(filePath);
 
     return { src: fullPath, type: type };
-  }
-  else {
+  } else {
     return null;
   }
 }
 
 export default {
-  components:{
-    FlowArrow
+  components: {
+    FlowArrow,
   },
 
   computed: {
@@ -92,14 +96,16 @@ export default {
         //  we have file path of quiz, so we can read relative paths of media files
         //  we can now simply enforce our rule "keep media files bundled with quiz"
         if (quizDirPath !== null) {
-          for (const media in quiz.mediaFiles) {  
-            const file = loadFileFromSystem(quizDirPath, quiz.mediaFiles[media]);
-            
+          for (const media in quiz.mediaFiles) {
+            const file = loadFileFromSystem(
+              quizDirPath,
+              quiz.mediaFiles[media]
+            );
+
             if (file === null) {
               // file cannot be accessed
               quiz.mediaFiles[media] = undefined;
-            }
-            else{
+            } else {
               quiz.mediaFiles[media] = file;
             }
           }
@@ -130,24 +136,25 @@ label[for="quizLoadInput"] {
   margin: auto;
   color: white;
   border-radius: 5px;
-  border: 1px solid var(--secondary-color);
+  border: 1px inset black;
   background-color: var(--secondary-color);
   width: 25vw;
   font-size: 50px;
   place-content: center;
   padding: 10px 0;
+  filter: drop-shadow(2px 2px 2px black);
 }
 
 label[for="quizLoadInput"]:hover {
   cursor: pointer;
-  color: 003049;
+  filter: brightness(0.8);
 }
 
 #load-status {
-    display: flex;
-    margin: auto;
-    justify-content: center;
-    margin-top: 1rem;
+  display: flex;
+  margin: auto;
+  justify-content: center;
+  margin-top: 1rem;
 }
 </style>
 

@@ -1,11 +1,10 @@
 <template>
-
   <div>
-     <mini-chart 
-        id="mini-chart"
-        :chartData="chartData" 
-        :options="chartOptions"
-      />
+    <mini-chart
+      id="mini-chart"
+      :chartData="chartData"
+      :options="chartOptions"
+    />
 
     <div id="wrapper">
       <div id="teams-wrapper">
@@ -14,49 +13,24 @@
           :key="index"
           :style="'color:' + item.color"
         >
-          <p>{{item.label}}</p>
-
-          <div
-            class="total-team-score"
-          >
-            {{getTeamTotal(index)}}
+          <div class="team-label">
+            {{ item.label }}
           </div>
-
         </div>
       </div>
 
-      <select 
-        id="theme-selector" 
-        v-model="currentThemeID"
-      >
-        <option 
-          v-for="(t, key) in themes"
-          :key="key"
-          :value="key"
-        >
-        {{t.text}}
-        </option>
-      </select>
-    
-      <div
-        id="questions"
-      >
-        <div
-          v-for="q in currentTheme.questions"
-          :key="q"
-        >
-          {{questions[q].text}}
+      <div id="theme-label">
+        {{ currentTheme.text }}
+      </div>
+
+      <div id="questions">
+        <div v-for="q in currentTheme.questions" :key="q">
+          <div>{{ questions[q].text }}</div>
         </div>
       </div>
 
-      <div
-        id="input-table"
-      >
-        <div
-          class="input-column"
-          v-for="(t, tKey) in teams"
-          :key="tKey"
-        >
+      <div id="input-table">
+        <div class="input-column" v-for="(t, tKey) in teams" :key="tKey">
           <div
             class="input-wrapper"
             v-for="(q, qKey) in currentTheme.questions"
@@ -68,119 +42,138 @@
               :step="questions[q].points.increment"
               :max="questions[q].points.max"
               min="0"
-            >
+            />
+          </div>
+
+          <div class="total-team-score" :style="'color:' + t.color">
+            {{ getTeamTotal(tKey) }}
           </div>
         </div>
-        
       </div>
+
+      <flow-arrow :isForward="false" :nextPage="'themeanswers'" :qMode="true">
+      </flow-arrow>
 
       <flow-arrow
         v-if="isLastTheme === true"
-          :isForward="true"
-          :nextPage="'finalresults'"
-          >
+        :isForward="true"
+        :nextPage="'finalresults'"
+        :qMode="true"
+      >
       </flow-arrow>
 
       <flow-arrow
         v-else
-          :isForward="true"
-          :nextPage="'themesoverview'"
-          >
+        :isForward="true"
+        :nextPage="'themesoverview'"
+        :qMode="true"
+      >
       </flow-arrow>
     </div>
   </div>
-  
 </template>
 
 <script>
-import FlowArrow from "../components/FlowArrow.vue"
-import MiniChart from "../components/MiniChart.vue"
+import FlowArrow from "../components/FlowArrow.vue";
+import MiniChart from "../components/MiniChart.vue";
 
 export default {
-  name: 'ScoreBoard',
-  components:{
+  name: "ScoreBoard",
+  components: {
     FlowArrow,
-    MiniChart
+    MiniChart,
   },
 
-  data(){
-    return{
+  data() {
+    return {
       chartOptions: {
-          legend: {
-            display: false
-          },
-          scales: {
-              xAxes: [{
-                display: true,
-                ticks: {
-                    suggestedMin: 0,    // minimum will be 0, unless there is a lower value.
-                    // OR //
-                    beginAtZero: true   // minimum value will be 0.
-                }
-              }],
-              yAxes: [{
-                
-              }]
-          },
-          responsive: true,
-          maintainAspectRatio: false
-      }
-    }
+        legend: {
+          display: false,
+        },
+        scales: {
+          xAxes: [
+            {
+              display: true,
+              ticks: {
+                suggestedMin: 0, // minimum will be 0, unless there is a lower value.
+                // OR //
+                beginAtZero: true, // minimum value will be 0.
+              },
+            },
+          ],
+          yAxes: [{}],
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+      },
+    };
   },
 
-  computed:{
-    teams(){
+  computed: {
+    teams() {
       return this.$store.state.teams;
     },
 
-    themes(){
+    themes() {
       return this.$store.state.quiz.themes;
     },
 
-    questions(){
+    questions() {
       return this.$store.state.quiz.questions;
     },
 
-    currentTheme(){ 
+    currentTheme() {
       return this.$store.getters.currentTheme;
     },
 
-    currentThemeID:{
-      set(value){
+    currentThemeID: {
+      set(value) {
         this.$store.commit("setCurrentTheme", value);
       },
-      get(){
+      get() {
         return this.$store.state.currentThemeID;
-      }
+      },
     },
 
-    isLastTheme(){
+    isLastTheme() {
       return this.$store.getters.isLastTheme;
     },
 
-    chartData(){
+    chartData() {
+      const teams = this.$store.getters.teamsSortedByScore;
+      const totalScores = [];
+      const colors = [];
+      const labels = [];
+
+      teams.forEach((e) => {
+        totalScores.push(e.score.total);
+        colors.push(e.color);
+        labels.push(e.label);
+      });
+
       const data = {
         datasets: [
-            {
-              data: this.$store.getters.teamTotalScores,
-              label: "",
-              backgroundColor: this.$store.getters.teamColors
-            },   
-          ],
+          {
+            data: totalScores,
+            label: "",
+            backgroundColor: colors,
+          },
+        ],
 
-          labels: this.$store.getters.teamLabels
+        labels: labels,
       };
+
       return data;
-    }
+    },
   },
 
-  watch:{
-    teams:{
+  watch: {
+    teams: {
       deep: true,
 
-      handler(){
+      handler() {
         for (let i = 0; i < this.teams.length; i++) {
-          const score = this.teams[i].score; 
+          const score = this.teams[i].score;
           let sum = 0;
 
           let scoreMap = {};
@@ -196,19 +189,19 @@ export default {
 
           for (let j = 0; j < currentTheme.questions.length; j++) {
             const themeQ = currentTheme.questions[j];
-            
+
             themeSum += scoreMap[themeQ];
           }
 
           score.total = sum;
           score.themes[this.currentThemeID] = themeSum;
         }
-      }
-    } 
+      },
+    },
   },
 
-  methods:{
-    getTeamTotal(teamIndex){
+  methods: {
+    getTeamTotal(teamIndex) {
       const team = this.teams[teamIndex];
       const allQ = team.score.questions;
       const currentQ = this.currentTheme.questions;
@@ -224,117 +217,123 @@ export default {
 
       return sum;
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
-
-#wrapper{
-    display: grid;
-    grid-template-areas:
-        "label teams"
-        "label teams"
-        "questions inputs";
-    height: 80%;
-    width: 90%;
-    margin: auto;
-    grid-template-columns: 30% 70%;
-    grid-template-rows: 10% 10% 80%;
-    position: relative;
-    border: 1px solid black;
+#wrapper {
+  display: grid;
+  grid-template-areas:
+    "label teams"
+    "questions inputs";
+  width: 85%;
+  margin: 5rem auto;
+  grid-template-columns: 30% 70%;
+  position: relative;
 }
 
 #mini-chart {
-    height: 10rem;
-    width: 80%;
-    margin: auto;
+  height: 10rem;
+  width: 80%;
+  margin: 2.5rem auto;
 }
 
 #teams-wrapper {
-    grid-area: teams;
-    display: flex;
+  grid-area: teams;
+  display: flex;
+  height: 100px;
 }
 
 #teams-wrapper > div {
-    font-size: 32px;
-    text-align: center;
-    height: 100%;
-    width: 100%;
-    display: grid;
-    align-items: center;
-    grid-template-rows: 70%;
+  font-size: 32px;
+  text-align: center;
+  width: 100%;
+  display: grid;
+  align-items: center;
+  height: 100px;
+}
+
+#theme-label {
+  grid-area: label;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  font-size: 48px;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+  font-weight: bold;
+  color: black;
+  height: 100%;
+}
+
+.team-label {
+  font-size: initial;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .total-team-score {
-    font-size: 36px;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    border-bottom: 3px solid black;
-    border-top: 1px solid black;
-}
-
-#theme-selector {
-    grid-area: label;
-    align-self: center;
-    display: flex;
-    justify-content: center;
-    font-size: 48px;
-    height: 100%;
-    font-weight: bold;
-    border: none;
-    text-align-last: center;
-    text-decoration: underline;
+  font-size: 36px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  border-right: 1px solid black;
 }
 
 #questions {
-    grid-area: questions;
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid black;
+  grid-area: questions;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid black;
 }
 
 #questions > div {
-    border-bottom: 1px solid black;
-    display: flex;
-    height: 20%;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+  display: flex;
+  height: 100px;
+  text-align: start;
 }
 
-#input-table{
-    display: flex;
-    flex-direction: row;
-    grid-area: inputs;
+#questions > div > div {
+  padding: 5px;
+}
+
+#input-table {
+  display: flex;
+  flex-direction: row;
+  grid-area: inputs;
 }
 
 .input-column {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: center;
 }
 
 .input-wrapper {
-    height: 20%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-bottom: 1px solid black;
-    border-right: 1px solid black;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
 }
 
 input[type="number"] {
-    width: 75%;
-    height: 75%;
-    font-size: 40px;
-    text-align: center;
-    background-color: var(--main-color);
-    border: none;
+  width: 75%;
+  height: 75%;
+  font-size: 40px;
+  text-align: center;
+  background-color: var(--main-color);
+  border: none;
+  color: white;
 }
-
-
 </style>
